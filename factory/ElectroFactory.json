@@ -1,0 +1,9 @@
+{
+	"name": "ElectroFactory",
+	"location": "southcentralus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "4f07eb66-15aa-480b-8222-cd86879d56ca",
+		"tenantId": "864b8123-7332-48db-b664-eed558169f6e"
+	}
+}
