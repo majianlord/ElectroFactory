@@ -14,7 +14,7 @@
 			],
 			"sinks": [],
 			"transformations": [],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1"
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_COMMITTED',\n\tquery: 'select out_text from epds01.._ecia_global_standard_region order by lin_no',\n\tformat: 'query') ~> source1"
 		}
 	}
 }
