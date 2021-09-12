@@ -5,6 +5,10 @@
 		"typeProperties": {
 			"sources": [
 				{
+					"dataset": {
+						"referenceName": "epdso1_ECIA_Table",
+						"type": "DatasetReference"
+					},
 					"name": "PrimarySelect"
 				}
 			],
@@ -22,7 +26,7 @@
 					"name": "Select1"
 				}
 			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> PrimarySelect\nPrimarySelect select(mapColumn(\n\t\tout_text\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datagactoryfiles',\n\tfolderPath: 'ECIA',\n\tcolumnDelimiter: '',\n\tescapeChar: '',\n\tquoteChar: '',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['ECIAGlobalStandardRegion1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+			"script": "source(output(\n\t\tlin_no as integer,\n\t\tout_text as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_COMMITTED',\n\tquery: 'select out_text from _ecia_global_standard_region order by lin_no',\n\tformat: 'query') ~> PrimarySelect\nPrimarySelect select(mapColumn(\n\t\tout_text\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datagactoryfiles',\n\tfolderPath: 'ECIA',\n\tcolumnDelimiter: '',\n\tescapeChar: '',\n\tquoteChar: '',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['ECIAGlobalStandardRegion1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
 		}
 	}
 }
