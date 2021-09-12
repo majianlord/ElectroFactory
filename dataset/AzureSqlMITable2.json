@@ -1,0 +1,26 @@
+{
+	"name": "AzureSqlMITable2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "TRO_Connect_epds01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": [
+			{
+				"name": "lin_no",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "out_text",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "_ecia_global_standard_region"
+		}
+	}
+}
