@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "ECIA Table Build and Export",
 	"properties": {
 		"activities": [
 			{
