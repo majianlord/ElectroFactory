@@ -1,0 +1,13 @@
+{
+	"name": "Temp_Files_Locations",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Temp Place to Put Delimited Files before FTP off to other locations",
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"connectionString": "DefaultEndpointsProtocol=https;AccountName=electrocore;EndpointSuffix=core.windows.net;",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkVMRUNUUk9GQUNUT1JZX2RiODYxNjVlLTkyMmYtNGRjZS05MDI2LTBiOWM5NjkwMjZmYyINCn0="
+		}
+	}
+}
