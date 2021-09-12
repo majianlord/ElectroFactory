@@ -1,0 +1,20 @@
+{
+	"name": "ECIA_TO TEXT",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlMITable2",
+						"type": "DatasetReference"
+					},
+					"name": "PrimarySelect"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"script": "source(output(\n\t\tlin_no as integer,\n\t\tout_text as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_COMMITTED',\n\tquery: 'select out_text from _ecia_global_standard_region order by lin_no',\n\tformat: 'query') ~> PrimarySelect"
+		}
+	}
+}
