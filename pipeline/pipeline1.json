@@ -7,7 +7,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "EE_INVENTORY_DUMP",
+						"activity": "ecia_export",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -50,6 +50,34 @@
 				"userProperties": [],
 				"typeProperties": {
 					"storedProcedureName": "[dbo].[_ee_inventory_dump_all]"
+				},
+				"linkedServiceName": {
+					"referenceName": "TRO_Connect_epds01",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "ecia_export",
+				"description": "Runs the _ecia_export Command which builds out the Table used to Export",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "EE_INVENTORY_DUMP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[_ecia_export]"
 				},
 				"linkedServiceName": {
 					"referenceName": "TRO_Connect_epds01",
