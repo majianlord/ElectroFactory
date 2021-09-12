@@ -1,0 +1,25 @@
+{
+	"name": "ftp_trustedparts_com",
+	"properties": {
+		"description": "ftp.trustedparts.com",
+		"annotations": [],
+		"type": "FtpServer",
+		"typeProperties": {
+			"host": "ftp.trustedparts.com",
+			"port": 21,
+			"enableSsl": false,
+			"enableServerCertificateValidation": false,
+			"authenticationType": "Basic",
+			"userName": "electro",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "Electro_Key_Vault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "ftptrustedpartscom",
+				"secretVersion": ""
+			}
+		}
+	}
+}
