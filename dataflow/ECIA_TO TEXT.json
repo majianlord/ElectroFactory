@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "AzureSqlMITable2",
+						"referenceName": "epdso1_ECIA_Table",
 						"type": "DatasetReference"
 					},
 					"name": "PrimarySelect"

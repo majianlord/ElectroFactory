@@ -1,5 +1,5 @@
 {
-	"name": "AzureSqlMITable2",
+	"name": "epdso1_ECIA_Table",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "TRO_Connect_epds01",
