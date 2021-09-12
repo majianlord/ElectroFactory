@@ -1,0 +1,10 @@
+{
+	"name": "Electro_Key_Vault",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://ElectroKeyVault.vault.azure.net/"
+		}
+	}
+}
