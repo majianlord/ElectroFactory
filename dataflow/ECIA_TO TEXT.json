@@ -29,7 +29,7 @@
 					"name": "Sort1"
 				}
 			],
-			"script": "source(output(\n\t\tlin_no as integer,\n\t\tout_text as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'NONE',\n\tformat: 'table') ~> PrimarySelect\nSort1 select(mapColumn(\n\t\tout_text\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nPrimarySelect sort(desc(lin_no, true)) ~> Sort1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datagactoryfiles',\n\tfolderPath: 'ECIA',\n\tcolumnDelimiter: '',\n\tescapeChar: '',\n\tquoteChar: '',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['ECIAGlobalStandardRegion1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+			"script": "source(output(\n\t\tlin_no as integer,\n\t\tout_text as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'NONE',\n\tformat: 'table') ~> PrimarySelect\nSort1 select(mapColumn(\n\t\tout_text\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nPrimarySelect sort(asc(lin_no, true)) ~> Sort1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datagactoryfiles',\n\tfolderPath: 'ECIA',\n\tcolumnDelimiter: '',\n\tescapeChar: '',\n\tquoteChar: '',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['ECIAGlobalStandardRegion1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
 		}
 	}
 }
