@@ -1,0 +1,388 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ElectroFactory"
+		},
+		"TRO_Connect_epds01_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'TRO_Connect_epds01'"
+		},
+		"Temp_Files_Locations_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Temp_Files_Locations'"
+		},
+		"Electro_Key_Vault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://ElectroKeyVault.vault.azure.net/"
+		},
+		"ftp_trustedparts_com_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "ftp.trustedparts.com"
+		},
+		"ftp_trustedparts_com_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "electro"
+		},
+		"BlobtoFTPFunction_properties_typeProperties_functionAppUrl": {
+			"type": "string",
+			"defaultValue": "https://electro-automation-ps.azurewebsites.net"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/TRO_Connect_epds01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlMI",
+				"typeProperties": {
+					"connectionString": "[parameters('TRO_Connect_epds01_connectionString')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "Electro_Key_Vault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "epdsuser"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Electro_Key_Vault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Electro_Key_Vault')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('Electro_Key_Vault_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ftp_trustedparts_com')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "ftp.trustedparts.com",
+				"annotations": [],
+				"type": "FtpServer",
+				"typeProperties": {
+					"host": "[parameters('ftp_trustedparts_com_properties_typeProperties_host')]",
+					"port": 21,
+					"enableSsl": false,
+					"enableServerCertificateValidation": false,
+					"authenticationType": "Basic",
+					"userName": "[parameters('ftp_trustedparts_com_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "Electro_Key_Vault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "ftptrustedpartscom",
+						"secretVersion": ""
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Electro_Key_Vault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/epdso1_ECIA_Table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TRO_Connect_epds01",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlMITable",
+				"schema": [
+					{
+						"name": "lin_no",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "out_text",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "_ecia_global_standard_region"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ECIA Table Build and Export')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "EE_INVENTORY_DUMP",
+						"description": "This will process the Inventory and Dump it out to Database table",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[_ee_inventory_dump_all]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TRO_Connect_epds01",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ecia_export",
+						"description": "Runs the _ecia_export Command which builds out the Table used to Export",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "EE_INVENTORY_DUMP",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[_ecia_export]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TRO_Connect_epds01",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ecia_export",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "ECIA_TO TEXT",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"PrimarySelect": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Azure Function1",
+						"type": "AzureFunctionActivity",
+						"dependsOn": [
+							{
+								"activity": "Data flow1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"functionName": "BlobFTP",
+							"method": "GET",
+							"headers": {}
+						},
+						"linkedServiceName": {
+							"referenceName": "BlobtoFTPFunction",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]",
+				"[concat(variables('factoryId'), '/dataflows/ECIA_TO TEXT')]",
+				"[concat(variables('factoryId'), '/linkedServices/BlobtoFTPFunction')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ECIA_TO TEXT')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "epdso1_ECIA_Table",
+								"type": "DatasetReference"
+							},
+							"name": "PrimarySelect"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Select1"
+						},
+						{
+							"name": "Sort1"
+						}
+					],
+					"script": "source(output(\n\t\tlin_no as integer,\n\t\tout_text as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'NONE',\n\tformat: 'table') ~> PrimarySelect\nSort1 select(mapColumn(\n\t\tout_text\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nPrimarySelect sort(asc(lin_no, true)) ~> Sort1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datagactoryfiles',\n\tfolderPath: 'ECIA',\n\tcolumnDelimiter: '',\n\tescapeChar: '',\n\tquoteChar: '',\n\tcolumnNamesAsHeader: false,\n\tpartitionFileNames:['ECIAGlobalStandardRegion1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/epdso1_ECIA_Table')]",
+				"[concat(variables('factoryId'), '/linkedServices/Temp_Files_Locations')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Temp_Files_Locations')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Temp Place to Put Delimited Files before FTP off to other locations",
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('Temp_Files_Locations_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Weekly Saterday 10pm')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Week",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "ECIA Table Build and Export",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2021-09-12T19:14:00",
+						"timeZone": "Central Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								20
+							],
+							"weekDays": [
+								"Saturday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/ECIA Table Build and Export')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BlobtoFTPFunction')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureFunction",
+				"typeProperties": {
+					"functionAppUrl": "[parameters('BlobtoFTPFunction_properties_typeProperties_functionAppUrl')]",
+					"functionKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "Electro_Key_Vault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "BlobtoFTP"
+					},
+					"authentication": "Anonymous"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Electro_Key_Vault')]"
+			]
+		}
+	]
+}

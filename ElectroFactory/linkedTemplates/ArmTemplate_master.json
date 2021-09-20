@@ -1,0 +1,84 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ElectroFactory"
+		},
+		"TRO_Connect_epds01_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'TRO_Connect_epds01'"
+		},
+		"Temp_Files_Locations_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Temp_Files_Locations'"
+		},
+		"Electro_Key_Vault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://ElectroKeyVault.vault.azure.net/"
+		},
+		"ftp_trustedparts_com_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "ftp.trustedparts.com"
+		},
+		"ftp_trustedparts_com_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "electro"
+		},
+		"BlobtoFTPFunction_properties_typeProperties_functionAppUrl": {
+			"type": "string",
+			"defaultValue": "https://electro-automation-ps.azurewebsites.net"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ElectroFactory_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Temp_Files_Locations_connectionString": {
+						"value": "[parameters('Temp_Files_Locations_connectionString')]"
+					},
+					"TRO_Connect_epds01_connectionString": {
+						"value": "[parameters('TRO_Connect_epds01_connectionString')]"
+					},
+					"Electro_Key_Vault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('Electro_Key_Vault_properties_typeProperties_baseUrl')]"
+					},
+					"ftp_trustedparts_com_properties_typeProperties_host": {
+						"value": "[parameters('ftp_trustedparts_com_properties_typeProperties_host')]"
+					},
+					"ftp_trustedparts_com_properties_typeProperties_userName": {
+						"value": "[parameters('ftp_trustedparts_com_properties_typeProperties_userName')]"
+					},
+					"BlobtoFTPFunction_properties_typeProperties_functionAppUrl": {
+						"value": "[parameters('BlobtoFTPFunction_properties_typeProperties_functionAppUrl')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
