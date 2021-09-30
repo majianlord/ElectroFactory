@@ -10,7 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureFileStorageLocation",
-				"fileName": "Inventory_Export_1.csv",
+				"fileName": {
+					"value": "@concat(replace('PricingLevel1.csv','.csv',''), '_', formatDateTime(convertTimeZone(utcnow(),'UTC','Eastern Standard Time'),'yyyy-MM-ddTHHmmss'), '.csv')",
+					"type": "Expression"
+				},
 				"folderPath": "Inventory Export"
 			},
 			"columnDelimiter": ",",
