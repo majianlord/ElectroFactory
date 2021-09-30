@@ -1,0 +1,137 @@
+{
+	"name": "BlobPricingLevel3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Temp_Files_Locations",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "PricingLevel3.csv",
+				"folderPath": "PriceFiles",
+				"container": "datafactoryfiles"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "manufact",
+				"type": "String"
+			},
+			{
+				"name": "part",
+				"type": "String"
+			},
+			{
+				"name": "weblink",
+				"type": "String"
+			},
+			{
+				"name": "qty",
+				"type": "String"
+			},
+			{
+				"name": "delivery",
+				"type": "String"
+			},
+			{
+				"name": "oq1",
+				"type": "String"
+			},
+			{
+				"name": "op1",
+				"type": "String"
+			},
+			{
+				"name": "oq2",
+				"type": "String"
+			},
+			{
+				"name": "op2",
+				"type": "String"
+			},
+			{
+				"name": "oq3",
+				"type": "String"
+			},
+			{
+				"name": "op3",
+				"type": "String"
+			},
+			{
+				"name": "oq4",
+				"type": "String"
+			},
+			{
+				"name": "op4",
+				"type": "String"
+			},
+			{
+				"name": "oq5",
+				"type": "String"
+			},
+			{
+				"name": "op5",
+				"type": "String"
+			},
+			{
+				"name": "oq6",
+				"type": "String"
+			},
+			{
+				"name": "op6",
+				"type": "String"
+			},
+			{
+				"name": "oq7",
+				"type": "String"
+			},
+			{
+				"name": "op7",
+				"type": "String"
+			},
+			{
+				"name": "oq8",
+				"type": "String"
+			},
+			{
+				"name": "op8",
+				"type": "String"
+			},
+			{
+				"name": "oq9",
+				"type": "String"
+			},
+			{
+				"name": "op9",
+				"type": "String"
+			},
+			{
+				"name": "oq10",
+				"type": "String"
+			},
+			{
+				"name": "op10",
+				"type": "String"
+			},
+			{
+				"name": "oq11",
+				"type": "String"
+			},
+			{
+				"name": "op11",
+				"type": "String"
+			},
+			{
+				"name": "vdesc",
+				"type": "String"
+			}
+		]
+	}
+}
