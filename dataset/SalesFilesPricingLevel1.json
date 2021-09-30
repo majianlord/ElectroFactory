@@ -1,5 +1,5 @@
 {
-	"name": "SalesReport1",
+	"name": "SalesFilesPricingLevel1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "SalesFiles",

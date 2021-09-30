@@ -170,7 +170,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "SalesReport1",
+						"referenceName": "SalesFilesPricingLevel1",
 						"type": "DatasetReference"
 					}
 				]
