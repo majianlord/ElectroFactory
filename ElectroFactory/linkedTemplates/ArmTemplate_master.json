@@ -15,6 +15,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'Temp_Files_Locations'"
 		},
+		"SalesFiles_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SalesFiles'"
+		},
+		"BlobtoFTPFunction_properties_typeProperties_functionAppUrl": {
+			"type": "string",
+			"defaultValue": "https://electro-automation-ps.azurewebsites.net"
+		},
 		"Electro_Key_Vault_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://ElectroKeyVault.vault.azure.net/"
@@ -26,10 +34,6 @@
 		"ftp_trustedparts_com_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "electro"
-		},
-		"BlobtoFTPFunction_properties_typeProperties_functionAppUrl": {
-			"type": "string",
-			"defaultValue": "https://electro-automation-ps.azurewebsites.net"
 		},
 		"containerUri": {
 			"type": "string",
@@ -61,20 +65,23 @@
 					"Temp_Files_Locations_connectionString": {
 						"value": "[parameters('Temp_Files_Locations_connectionString')]"
 					},
+					"SalesFiles_connectionString": {
+						"value": "[parameters('SalesFiles_connectionString')]"
+					},
 					"TRO_Connect_epds01_connectionString": {
 						"value": "[parameters('TRO_Connect_epds01_connectionString')]"
 					},
 					"Electro_Key_Vault_properties_typeProperties_baseUrl": {
 						"value": "[parameters('Electro_Key_Vault_properties_typeProperties_baseUrl')]"
 					},
+					"BlobtoFTPFunction_properties_typeProperties_functionAppUrl": {
+						"value": "[parameters('BlobtoFTPFunction_properties_typeProperties_functionAppUrl')]"
+					},
 					"ftp_trustedparts_com_properties_typeProperties_host": {
 						"value": "[parameters('ftp_trustedparts_com_properties_typeProperties_host')]"
 					},
 					"ftp_trustedparts_com_properties_typeProperties_userName": {
 						"value": "[parameters('ftp_trustedparts_com_properties_typeProperties_userName')]"
-					},
-					"BlobtoFTPFunction_properties_typeProperties_functionAppUrl": {
-						"value": "[parameters('BlobtoFTPFunction_properties_typeProperties_functionAppUrl')]"
 					}
 				}
 			},
