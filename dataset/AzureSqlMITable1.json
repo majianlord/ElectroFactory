@@ -1,0 +1,163 @@
+{
+	"name": "AzureSqlMITable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "TRO_Connect_epds01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": [
+			{
+				"name": "manufact",
+				"type": "varchar"
+			},
+			{
+				"name": "part",
+				"type": "varchar"
+			},
+			{
+				"name": "weblink",
+				"type": "varchar"
+			},
+			{
+				"name": "qty",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "delivery",
+				"type": "varchar"
+			},
+			{
+				"name": "oq1",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op1",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "oq2",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op2",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "oq3",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op3",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "oq4",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op4",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "oq5",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op5",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "oq6",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op6",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "oq7",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op7",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "oq8",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op8",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "oq9",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op9",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "oq10",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op10",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "oq11",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "op11",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 3
+			},
+			{
+				"name": "vdesc",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "_Inventory_Export1"
+		}
+	}
+}
