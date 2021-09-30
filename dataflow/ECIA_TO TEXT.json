@@ -13,14 +13,14 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "AzureSqlMITable1",
+						"referenceName": "Pricing_Table_1",
 						"type": "DatasetReference"
 					},
 					"name": "PricingTable1"
 				},
 				{
 					"dataset": {
-						"referenceName": "Inventory_Export_2",
+						"referenceName": "Pricing_Table_2",
 						"type": "DatasetReference"
 					},
 					"name": "PricingTable2"

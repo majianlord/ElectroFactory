@@ -1,5 +1,5 @@
 {
-	"name": "AzureSqlMITable1",
+	"name": "Pricing_Table_1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "TRO_Connect_epds01",
