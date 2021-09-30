@@ -1,0 +1,26 @@
+{
+	"name": "SalesFilesPricingLevel3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SalesFiles",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureFileStorageLocation",
+				"fileName": {
+					"value": "@concat(replace('PricingLevel3.csv','.csv',''), '_', formatDateTime(convertTimeZone(utcnow(),'UTC','Eastern Standard Time'),'yyyy-MM-ddTHHmmss'), '.csv')",
+					"type": "Expression"
+				},
+				"folderPath": "Inventory Export"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
