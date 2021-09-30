@@ -1,0 +1,23 @@
+{
+	"name": "SalesReport1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SalesFiles",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureFileStorageLocation",
+				"fileName": "Inventory_Export_1.csv",
+				"folderPath": "Inventory Export"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
