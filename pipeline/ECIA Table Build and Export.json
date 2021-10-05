@@ -6,14 +6,7 @@
 				"name": "EE_INVENTORY_DUMP",
 				"description": "This will process the Inventory and Dump it out to Database table",
 				"type": "SqlServerStoredProcedure",
-				"dependsOn": [
-					{
-						"activity": "Copy data3",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -94,7 +87,7 @@
 				"type": "AzureFunctionActivity",
 				"dependsOn": [
 					{
-						"activity": "Data flow1",
+						"activity": "Copy data3",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -250,7 +243,14 @@
 			{
 				"name": "Copy data4",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Data flow1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
