@@ -5,13 +5,13 @@
 		"factoryName": {
 			"value": "ElectroFactory"
 		},
+		"SalesFiles_connectionString": {
+			"value": ""
+		},
 		"TRO_Connect_epds01_connectionString": {
 			"value": ""
 		},
 		"Temp_Files_Locations_connectionString": {
-			"value": ""
-		},
-		"SalesFiles_connectionString": {
 			"value": ""
 		},
 		"BlobtoFTPFunction_properties_typeProperties_functionAppUrl": {

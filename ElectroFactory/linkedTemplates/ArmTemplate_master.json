@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "ElectroFactory"
 		},
+		"SalesFiles_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SalesFiles'"
+		},
 		"TRO_Connect_epds01_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'TRO_Connect_epds01'"
@@ -14,10 +18,6 @@
 		"Temp_Files_Locations_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'Temp_Files_Locations'"
-		},
-		"SalesFiles_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'SalesFiles'"
 		},
 		"BlobtoFTPFunction_properties_typeProperties_functionAppUrl": {
 			"type": "string",
@@ -62,11 +62,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"Temp_Files_Locations_connectionString": {
-						"value": "[parameters('Temp_Files_Locations_connectionString')]"
-					},
 					"SalesFiles_connectionString": {
 						"value": "[parameters('SalesFiles_connectionString')]"
+					},
+					"Temp_Files_Locations_connectionString": {
+						"value": "[parameters('Temp_Files_Locations_connectionString')]"
 					},
 					"TRO_Connect_epds01_connectionString": {
 						"value": "[parameters('TRO_Connect_epds01_connectionString')]"

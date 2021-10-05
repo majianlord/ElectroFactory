@@ -1,0 +1,844 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ElectroFactory"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ECIA Table Build and Export')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "EE_INVENTORY_DUMP",
+						"description": "This will process the Inventory and Dump it out to Database table",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[_ee_inventory_dump_all]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TRO_Connect_epds01",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ecia_export",
+						"description": "Runs the _ecia_export Command which builds out the Table used to Export",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "EE_INVENTORY_DUMP",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[_ecia_export]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TRO_Connect_epds01",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ecia_export",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "ECIA_TO TEXT",
+								"type": "DataFlowReference"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Azure Function1",
+						"type": "AzureFunctionActivity",
+						"dependsOn": [
+							{
+								"activity": "Copy data3",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"functionName": "BlobFTP",
+							"method": "GET"
+						},
+						"linkedServiceName": {
+							"referenceName": "BlobtoFTPFunction",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Copy data2",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy data4",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureFileStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "BlobPricingLevel2",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SalesFilesPricingLevel2",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "Copy data3",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy data2",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureFileStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "BlobPricingLevel3",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SalesFilesPricingLevel3",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "Copy data4",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Data flow1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureFileStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "BlobPricingLevel1",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SalesFilesPricingLevel1",
+								"type": "DatasetReference"
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/BlobPricingLevel2')]",
+				"[concat(variables('factoryId'), '/datasets/SalesFilesPricingLevel2')]",
+				"[concat(variables('factoryId'), '/datasets/BlobPricingLevel3')]",
+				"[concat(variables('factoryId'), '/datasets/SalesFilesPricingLevel3')]",
+				"[concat(variables('factoryId'), '/datasets/BlobPricingLevel1')]",
+				"[concat(variables('factoryId'), '/datasets/SalesFilesPricingLevel1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BlobPricingLevel1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Temp_Files_Locations",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "PricingLevel1.csv",
+						"folderPath": "PriceFiles",
+						"container": "datafactoryfiles"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "manufact",
+						"type": "String"
+					},
+					{
+						"name": "part",
+						"type": "String"
+					},
+					{
+						"name": "weblink",
+						"type": "String"
+					},
+					{
+						"name": "qty",
+						"type": "String"
+					},
+					{
+						"name": "delivery",
+						"type": "String"
+					},
+					{
+						"name": "oq1",
+						"type": "String"
+					},
+					{
+						"name": "op1",
+						"type": "String"
+					},
+					{
+						"name": "oq2",
+						"type": "String"
+					},
+					{
+						"name": "op2",
+						"type": "String"
+					},
+					{
+						"name": "oq3",
+						"type": "String"
+					},
+					{
+						"name": "op3",
+						"type": "String"
+					},
+					{
+						"name": "oq4",
+						"type": "String"
+					},
+					{
+						"name": "op4",
+						"type": "String"
+					},
+					{
+						"name": "oq5",
+						"type": "String"
+					},
+					{
+						"name": "op5",
+						"type": "String"
+					},
+					{
+						"name": "oq6",
+						"type": "String"
+					},
+					{
+						"name": "op6",
+						"type": "String"
+					},
+					{
+						"name": "oq7",
+						"type": "String"
+					},
+					{
+						"name": "op7",
+						"type": "String"
+					},
+					{
+						"name": "oq8",
+						"type": "String"
+					},
+					{
+						"name": "op8",
+						"type": "String"
+					},
+					{
+						"name": "oq9",
+						"type": "String"
+					},
+					{
+						"name": "op9",
+						"type": "String"
+					},
+					{
+						"name": "oq10",
+						"type": "String"
+					},
+					{
+						"name": "op10",
+						"type": "String"
+					},
+					{
+						"name": "oq11",
+						"type": "String"
+					},
+					{
+						"name": "op11",
+						"type": "String"
+					},
+					{
+						"name": "vdesc",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BlobPricingLevel2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Temp_Files_Locations",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "PricingLevel2.csv",
+						"folderPath": "PriceFiles",
+						"container": "datafactoryfiles"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "manufact",
+						"type": "String"
+					},
+					{
+						"name": "part",
+						"type": "String"
+					},
+					{
+						"name": "weblink",
+						"type": "String"
+					},
+					{
+						"name": "qty",
+						"type": "String"
+					},
+					{
+						"name": "delivery",
+						"type": "String"
+					},
+					{
+						"name": "oq1",
+						"type": "String"
+					},
+					{
+						"name": "op1",
+						"type": "String"
+					},
+					{
+						"name": "oq2",
+						"type": "String"
+					},
+					{
+						"name": "op2",
+						"type": "String"
+					},
+					{
+						"name": "oq3",
+						"type": "String"
+					},
+					{
+						"name": "op3",
+						"type": "String"
+					},
+					{
+						"name": "oq4",
+						"type": "String"
+					},
+					{
+						"name": "op4",
+						"type": "String"
+					},
+					{
+						"name": "oq5",
+						"type": "String"
+					},
+					{
+						"name": "op5",
+						"type": "String"
+					},
+					{
+						"name": "oq6",
+						"type": "String"
+					},
+					{
+						"name": "op6",
+						"type": "String"
+					},
+					{
+						"name": "oq7",
+						"type": "String"
+					},
+					{
+						"name": "op7",
+						"type": "String"
+					},
+					{
+						"name": "oq8",
+						"type": "String"
+					},
+					{
+						"name": "op8",
+						"type": "String"
+					},
+					{
+						"name": "oq9",
+						"type": "String"
+					},
+					{
+						"name": "op9",
+						"type": "String"
+					},
+					{
+						"name": "oq10",
+						"type": "String"
+					},
+					{
+						"name": "op10",
+						"type": "String"
+					},
+					{
+						"name": "oq11",
+						"type": "String"
+					},
+					{
+						"name": "op11",
+						"type": "String"
+					},
+					{
+						"name": "vdesc",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BlobPricingLevel3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Temp_Files_Locations",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "PricingLevel3.csv",
+						"folderPath": "PriceFiles",
+						"container": "datafactoryfiles"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "manufact",
+						"type": "String"
+					},
+					{
+						"name": "part",
+						"type": "String"
+					},
+					{
+						"name": "weblink",
+						"type": "String"
+					},
+					{
+						"name": "qty",
+						"type": "String"
+					},
+					{
+						"name": "delivery",
+						"type": "String"
+					},
+					{
+						"name": "oq1",
+						"type": "String"
+					},
+					{
+						"name": "op1",
+						"type": "String"
+					},
+					{
+						"name": "oq2",
+						"type": "String"
+					},
+					{
+						"name": "op2",
+						"type": "String"
+					},
+					{
+						"name": "oq3",
+						"type": "String"
+					},
+					{
+						"name": "op3",
+						"type": "String"
+					},
+					{
+						"name": "oq4",
+						"type": "String"
+					},
+					{
+						"name": "op4",
+						"type": "String"
+					},
+					{
+						"name": "oq5",
+						"type": "String"
+					},
+					{
+						"name": "op5",
+						"type": "String"
+					},
+					{
+						"name": "oq6",
+						"type": "String"
+					},
+					{
+						"name": "op6",
+						"type": "String"
+					},
+					{
+						"name": "oq7",
+						"type": "String"
+					},
+					{
+						"name": "op7",
+						"type": "String"
+					},
+					{
+						"name": "oq8",
+						"type": "String"
+					},
+					{
+						"name": "op8",
+						"type": "String"
+					},
+					{
+						"name": "oq9",
+						"type": "String"
+					},
+					{
+						"name": "op9",
+						"type": "String"
+					},
+					{
+						"name": "oq10",
+						"type": "String"
+					},
+					{
+						"name": "op10",
+						"type": "String"
+					},
+					{
+						"name": "oq11",
+						"type": "String"
+					},
+					{
+						"name": "op11",
+						"type": "String"
+					},
+					{
+						"name": "vdesc",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SalesFilesPricingLevel1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SalesFiles",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureFileStorageLocation",
+						"fileName": {
+							"value": "@concat(replace('PricingLevel1.csv','.csv',''), '_', formatDateTime(convertTimeZone(utcnow(),'UTC','Eastern Standard Time'),'yyyy-MM-ddTHHmmss'), '.csv')",
+							"type": "Expression"
+						},
+						"folderPath": "Inventory Export"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SalesFilesPricingLevel2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SalesFiles",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureFileStorageLocation",
+						"fileName": {
+							"value": "@concat(replace('PricingLevel2.csv','.csv',''), '_', formatDateTime(convertTimeZone(utcnow(),'UTC','Eastern Standard Time'),'yyyy-MM-ddTHHmmss'), '.csv')",
+							"type": "Expression"
+						},
+						"folderPath": "Inventory Export"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SalesFilesPricingLevel3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SalesFiles",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureFileStorageLocation",
+						"fileName": {
+							"value": "@concat(replace('PricingLevel3.csv','.csv',''), '_', formatDateTime(convertTimeZone(utcnow(),'UTC','Eastern Standard Time'),'yyyy-MM-ddTHHmmss'), '.csv')",
+							"type": "Expression"
+						},
+						"folderPath": "Inventory Export"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		}
+	]
+}
