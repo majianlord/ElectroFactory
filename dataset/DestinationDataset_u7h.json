@@ -1,0 +1,16 @@
+{
+	"name": "DestinationDataset_u7h",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Azure_WirelessWarehouse_Share",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureFileStorageLocation"
+			}
+		}
+	}
+}
