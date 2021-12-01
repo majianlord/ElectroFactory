@@ -1,5 +1,5 @@
 {
-	"name": "SourceDataset_u7h",
+	"name": "WirelessWareHouse_FTP_Source",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Azure_WW_LABEL_COPY",

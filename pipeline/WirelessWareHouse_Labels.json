@@ -52,7 +52,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_u7h",
+						"referenceName": "WirelessWareHouse_FTP_Source",
 						"type": "DatasetReference"
 					}
 				],
