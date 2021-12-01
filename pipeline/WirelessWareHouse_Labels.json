@@ -58,7 +58,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DestinationDataset_u7h",
+						"referenceName": "Azure_Wireless_WareHouse_Share",
 						"type": "DatasetReference"
 					}
 				]

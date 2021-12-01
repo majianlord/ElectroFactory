@@ -1,5 +1,5 @@
 {
-	"name": "DestinationDataset_u7h",
+	"name": "Azure_Wireless_WareHouse_Share",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Azure_WirelessWarehouse_Share",
