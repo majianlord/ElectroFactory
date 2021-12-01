@@ -5,6 +5,12 @@
 		"factoryName": {
 			"value": "ElectroFactory"
 		},
+		"Azure_WW_LABEL_COPY_password": {
+			"value": ""
+		},
+		"Azure_WirelessWarehouse_Share_connectionString": {
+			"value": ""
+		},
 		"SalesFiles_connectionString": {
 			"value": ""
 		},
@@ -13,6 +19,12 @@
 		},
 		"Temp_Files_Locations_connectionString": {
 			"value": ""
+		},
+		"Azure_WW_LABEL_COPY_properties_typeProperties_host": {
+			"value": "waws-prod-sn1-171.ftp.azurewebsites.windows.net"
+		},
+		"Azure_WW_LABEL_COPY_properties_typeProperties_userName": {
+			"value": "ElectroWebTools\\$ElectroWebTools"
 		},
 		"BlobtoFTPFunction_properties_typeProperties_functionAppUrl": {
 			"value": "https://electro-automation-ps.azurewebsites.net"
