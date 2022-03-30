@@ -323,7 +323,7 @@
 		"variables": {
 			"Testing Enabled": {
 				"type": "Boolean",
-				"defaultValue": "False"
+				"defaultValue": false
 			}
 		},
 		"annotations": []
