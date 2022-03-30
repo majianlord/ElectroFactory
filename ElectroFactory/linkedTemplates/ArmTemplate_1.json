@@ -437,7 +437,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"expression": {
-								"value": "@variables('Testing Enabled')",
+								"value": "@variables('Run EPDS SQL')",
 								"type": "Expression"
 							},
 							"ifTrueActivities": [
@@ -499,9 +499,9 @@
 					"cancelAfter": {}
 				},
 				"variables": {
-					"Testing Enabled": {
+					"Run EPDS SQL": {
 						"type": "Boolean",
-						"defaultValue": false
+						"defaultValue": true
 					}
 				},
 				"annotations": []
