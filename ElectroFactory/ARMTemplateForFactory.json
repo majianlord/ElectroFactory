@@ -63,60 +63,11 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "EE_INVENTORY_DUMP",
-						"description": "This will process the Inventory and Dump it out to Database table",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[_ee_inventory_dump_all]"
-						},
-						"linkedServiceName": {
-							"referenceName": "TRO_Connect_epds01",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "ecia_export",
-						"description": "Runs the _ecia_export Command which builds out the Table used to Export",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [
-							{
-								"activity": "EE_INVENTORY_DUMP",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[_ecia_export]"
-						},
-						"linkedServiceName": {
-							"referenceName": "TRO_Connect_epds01",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
 						"name": "Data flow1",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
-								"activity": "ecia_export",
+								"activity": "Run EPDS Exports",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -383,16 +334,84 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Run EPDS Exports",
+						"type": "IfCondition",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@variables('Testing Enabled')",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "EE_INVENTORY_DUMP_copy1",
+									"description": "This will process the Inventory and Dump it out to Database table",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[_ee_inventory_dump_all]"
+									},
+									"linkedServiceName": {
+										"referenceName": "TRO_Connect_epds01",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "ecia_export_copy1",
+									"description": "Runs the _ecia_export Command which builds out the Table used to Export",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "EE_INVENTORY_DUMP_copy1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[_ecia_export]"
+									},
+									"linkedServiceName": {
+										"referenceName": "TRO_Connect_epds01",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"variables": {
+					"Testing Enabled": {
+						"type": "Boolean",
+						"defaultValue": false
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]",
 				"[concat(variables('factoryId'), '/dataflows/ECIA_TO TEXT')]",
 				"[concat(variables('factoryId'), '/linkedServices/BlobtoFTPFunction')]",
 				"[concat(variables('factoryId'), '/datasets/BlobPricingLevel2')]",
@@ -400,7 +419,8 @@
 				"[concat(variables('factoryId'), '/datasets/BlobPricingLevel3')]",
 				"[concat(variables('factoryId'), '/datasets/SalesFilesPricingLevel3')]",
 				"[concat(variables('factoryId'), '/datasets/BlobPricingLevel1')]",
-				"[concat(variables('factoryId'), '/datasets/SalesFilesPricingLevel1')]"
+				"[concat(variables('factoryId'), '/datasets/SalesFilesPricingLevel1')]",
+				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]"
 			]
 		},
 		{
