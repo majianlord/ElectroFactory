@@ -321,9 +321,9 @@
 			}
 		],
 		"variables": {
-			"Testing Enabled": {
+			"Run EPDS SQL": {
 				"type": "Boolean",
-				"defaultValue": false
+				"defaultValue": true
 			}
 		},
 		"annotations": []
