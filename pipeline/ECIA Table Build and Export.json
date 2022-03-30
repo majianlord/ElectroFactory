@@ -304,8 +304,26 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": []
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": []
 			}
 		],
+		"variables": {
+			"Testing Enabled": {
+				"type": "Boolean",
+				"defaultValue": "False"
+			}
+		},
 		"annotations": []
 	}
 }
