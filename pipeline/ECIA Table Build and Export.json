@@ -263,7 +263,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@variables('Testing Enabled')",
+						"value": "@variables('Run EPDS SQL')",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
