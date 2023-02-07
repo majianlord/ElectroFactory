@@ -1,5 +1,5 @@
 {
-	"name": "TyTestReport1",
+	"name": "To_stock_inventory_report",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Temp_Files_Locations",

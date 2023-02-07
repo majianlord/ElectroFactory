@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "TyTestReport1",
+						"referenceName": "To_stock_inventory_report",
 						"type": "DatasetReference"
 					},
 					"name": "sink1",
