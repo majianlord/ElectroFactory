@@ -1,5 +1,5 @@
 {
-	"name": "To_stock_inventory_report",
+	"name": "To_stock_inventory_report_DS",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Temp_Files_Locations",

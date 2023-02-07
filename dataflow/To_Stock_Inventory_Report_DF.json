@@ -1,5 +1,5 @@
 {
-	"name": "SOrt by Value to Stock",
+	"name": "To_Stock_Inventory_Report_DF",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "To_stock_inventory_report",
+						"referenceName": "To_stock_inventory_report_DS",
 						"type": "DatasetReference"
 					},
 					"name": "sink1",

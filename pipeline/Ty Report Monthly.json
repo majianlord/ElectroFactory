@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "SOrt by Value to Stock",
+						"referenceName": "To_Stock_Inventory_Report_DF",
 						"type": "DataFlowReference"
 					},
 					"compute": {
