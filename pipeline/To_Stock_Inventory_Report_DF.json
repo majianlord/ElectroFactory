@@ -1,9 +1,25 @@
 {
-	"name": "To_stock_inventory_report_monthly_PL",
+	"name": "To_Stock_Inventory_Report_DF",
 	"properties": {
 		"activities": [
 			{
-				"name": "Ty M Report 1",
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST"
+				}
+			},
+			{
+				"name": "To Stock Inventory Run",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -24,22 +40,6 @@
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
-				}
-			},
-			{
-				"name": "Web1",
-				"type": "WebActivity",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"method": "POST"
 				}
 			}
 		],
