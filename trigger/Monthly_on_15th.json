@@ -1,0 +1,32 @@
+{
+	"name": "Monthly_on_15th",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "To_Stock_Inventory_Report_DF",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Month",
+				"interval": 15,
+				"startTime": "2023-02-07T20:39:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"hours": [
+						1
+					],
+					"monthDays": [
+						15
+					]
+				}
+			}
+		}
+	}
+}
