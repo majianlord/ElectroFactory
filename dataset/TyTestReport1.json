@@ -1,0 +1,24 @@
+{
+	"name": "TyTestReport1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Temp_Files_Locations",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "TyReport1.csv",
+				"folderPath": "TyReport",
+				"container": "datafactoryfiles"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
