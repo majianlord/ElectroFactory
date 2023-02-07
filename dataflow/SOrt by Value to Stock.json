@@ -14,7 +14,11 @@
 			],
 			"sinks": [
 				{
-					"name": "sink1"
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "Temp_Files_Locations",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
 			"transformations": [
@@ -46,7 +50,7 @@
 				"     isolationLevel: 'READ_COMMITTED') ~> Source1",
 				"Source1 sort(desc(value_to_stock, true)) ~> sort1",
 				"sort1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
+				"     validateSchema: true,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
