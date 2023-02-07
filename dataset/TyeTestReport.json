@@ -1,0 +1,23 @@
+{
+	"name": "TyeTestReport",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SalesFiles",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureFileStorageLocation",
+				"fileName": {
+					"value": "@concat(replace('TyReport1.xls','.xls',''), '_', formatDateTime(convertTimeZone(utcnow('yyyy-MM-ddTHHmmss'),'UTC','Eastern Standard Time'),'yyyy-MM-ddTHHmmss'), '.xls')",
+					"type": "Expression"
+				},
+				"folderPath": "Ty Reports"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
