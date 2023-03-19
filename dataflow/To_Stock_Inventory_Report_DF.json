@@ -14,9 +14,9 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "To_stock_inventory_report_DS",
-						"type": "DatasetReference"
+					"linkedService": {
+						"referenceName": "Temp_Files_Locations",
+						"type": "LinkedServiceReference"
 					},
 					"name": "sink1",
 					"rejectedDataLinkedService": {
@@ -55,6 +55,14 @@
 				"Source1 sort(desc(value_to_stock, true)) ~> sort1",
 				"sort1 sink(allowSchemaDrift: true,",
 				"     validateSchema: true,",
+				"     format: 'delimited',",
+				"     container: 'datafactoryfiles',",
+				"     folderPath: 'TyReport1',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['to-stock-inventory.csv'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
