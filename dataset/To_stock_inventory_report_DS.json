@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "To-stock inventory.csv",
-				"folderPath": "TyReport",
+				"folderPath": "TyReport1",
 				"container": "datafactoryfiles"
 			},
 			"columnDelimiter": "|",
