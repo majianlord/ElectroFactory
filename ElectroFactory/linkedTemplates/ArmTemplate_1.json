@@ -13,6 +13,172 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/Pricing_Table_3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TRO_Connect_epds01",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlMITable",
+				"schema": [
+					{
+						"name": "manufact",
+						"type": "varchar"
+					},
+					{
+						"name": "part",
+						"type": "varchar"
+					},
+					{
+						"name": "weblink",
+						"type": "varchar"
+					},
+					{
+						"name": "qty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "delivery",
+						"type": "varchar"
+					},
+					{
+						"name": "oq1",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op1",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "oq2",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op2",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "oq3",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op3",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "oq4",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op4",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "oq5",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op5",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "oq6",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op6",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "oq7",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op7",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "oq8",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op8",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "oq9",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op9",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "oq10",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op10",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "oq11",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "op11",
+						"type": "decimal",
+						"precision": 19,
+						"scale": 3
+					},
+					{
+						"name": "vdesc",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "_Inventory_Export3"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/epdso1_ECIA_Table')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -40,6 +206,163 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/To_Stock_Inventory_Report_DF')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "TRO_Connect_epds01",
+								"type": "LinkedServiceReference"
+							},
+							"name": "Source1"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1",
+							"rejectedDataLinkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "sort1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          vend_no as string,",
+						"          po_no as integer,",
+						"          lin_no as decimal(5,0),",
+						"          item_no as string,",
+						"          manu_no as string,",
+						"          promise_dt as timestamp,",
+						"          ship_asap as boolean,",
+						"          unit_cost as decimal(19,5),",
+						"          bal_of_ord as integer,",
+						"          allocated as integer,",
+						"          to_stock as integer,",
+						"          value_to_stock as decimal(30,5)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     limit: 100,",
+						"     format: 'query',",
+						"     store: 'sqlserver',",
+						"     query: 'select  po_hedr.vend_no, po_detl.po_no, po_Detl.lin_no, po_Detl.item_no, po_Detl.manu_no, po_detl.promise_dt, po_Detl.ship_asap, po_detl.unit_cost,  po_Detl.bal_of_ord, x.allocated as  \\'allocated\\', (po_detl.bal_of_ord - x.allocated) \\'to_stock\\', ((po_detl.bal_of_ord - x.allocated) * po_detl.unit_cost) \\'value_to_stock\\'\\nfrom po_detl\\njoin po_hedr on po_hedr.po_no = po_Detl.po_no and po_hedr.vend_no not like \\'%SHOP%\\'\\nleft join (select d.po_no, d.lin_no, sum(c.qty_allc) as \\'allocated\\'\\n                     from po_allc c\\n                     join po_Detl d on d.po_no = c.po_no and d.lin_no = c.lin_no\\n                     join po_hedr h on h.po_no = d.po_no\\n                     where d.status <> \\'V\\' and d.status <> \\'C\\' and h.status <> \\'C\\' and h.status <> \\'V\\' and d.bal_of_ord > \\'0\\'\\n                     group by d.po_no, d.lin_no) x on x.po_no = po_Detl.po_no and x.lin_no = po_detl.lin_no\\nwhere (x.allocated <> po_Detl.bal_of_ord) and bal_of_ord > 0 and po_hedr.vend_no <> \\'%SHOP%\\' and po_Detl.status <> \\'V\\' and po_Detl.status <> \\'C\\' \\ngroup by  po_hedr.vend_no, po_detl.po_no, po_Detl.lin_no, po_Detl.item_no, po_Detl.manu_no, po_detl.promise_dt, po_Detl.ship_asap, po_detl.unit_cost, po_Detl.bal_of_ord, x.allocated\\n\\n',",
+						"     isolationLevel: 'READ_COMMITTED') ~> Source1",
+						"Source1 sort(desc(value_to_stock, true)) ~> sort1",
+						"sort1 sink(allowSchemaDrift: true,",
+						"     validateSchema: true,",
+						"     format: 'delimited',",
+						"     container: 'datafactoryfiles',",
+						"     folderPath: 'TyReport1',",
+						"     truncate: true,",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['to-stock-inventory.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 1,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/To_Stock_Inventory_Report_DF')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Send Email Logic APP",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "To Stock Inventory Run",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"FileName": "To-stock inventory.csv",
+								"EMailTo": "chood@cna-consulting.com",
+								"EmailSubject": "Subject OF Email",
+								"PipeLineName": "ECIA_To_Text",
+								"FilePath": "datafactoryfiles/TyReport1/To-stock inventory.csv"
+							}
+						}
+					},
+					{
+						"name": "To Stock Inventory Run",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "To_Stock_Inventory_Report_DF",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"Source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/To_Stock_Inventory_Report_DF')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Every 1 Minute Trigger')]",
@@ -144,11 +467,12 @@
 							"name": "Sort1"
 						}
 					],
-					"script": "source(output(\n\t\tlin_no as integer,\n\t\tout_text as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'NONE',\n\tformat: 'table') ~> PrimarySelect\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable1\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable2\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable3\nSort1 select(mapColumn(\n\t\tout_text\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nPrimarySelect sort(asc(lin_no, true)) ~> Sort1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'ECIA',\n\tcolumnDelimiter: '',\n\tescapeChar: '',\n\tquoteChar: '',\n\tcolumnNamesAsHeader: false,\n\tpartitionFileNames:['ECIAGlobalStandardRegion1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1\nPricingTable1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink2\nPricingTable2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel2.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink3\nPricingTable3 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel3.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink4"
+					"script": "source(output(\n\t\tlin_no as integer,\n\t\tout_text as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'NONE',\n\tformat: 'table') ~> PrimarySelect\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable1\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable2\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable3\nSort1 select(mapColumn(\n\t\tout_text\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nPrimarySelect sort(asc(lin_no, true)) ~> Sort1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'ECIA',\n\tcolumnDelimiter: '|',\n\tescapeChar: '',\n\tquoteChar: '',\n\tcolumnNamesAsHeader: false,\n\tpartitionFileNames:['ECIAGlobalStandardRegion1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1\nPricingTable1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink2\nPricingTable2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel2.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink3\nPricingTable3 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel3.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink4"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/epdso1_ECIA_Table')]"
+				"[concat(variables('factoryId'), '/datasets/epdso1_ECIA_Table')]",
+				"[concat(variables('factoryId'), '/datasets/Pricing_Table_3')]"
 			]
 		},
 		{
@@ -508,6 +832,44 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/ECIA_TO TEXT')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Monthly_on_15th')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "To_Stock_Inventory_Report_DF",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Month",
+						"interval": 15,
+						"startTime": "2023-02-07T20:39:00Z",
+						"timeZone": "UTC",
+						"schedule": {
+							"hours": [
+								1
+							],
+							"monthDays": [
+								15
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/To_Stock_Inventory_Report_DF')]"
 			]
 		},
 		{

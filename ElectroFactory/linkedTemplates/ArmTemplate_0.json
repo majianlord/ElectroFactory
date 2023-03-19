@@ -25,7 +25,8 @@
 		},
 		"TRO_Connect_epds01_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'TRO_Connect_epds01'"
+			"metadata": "Secure string for 'connectionString' of 'TRO_Connect_epds01'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tro-scus-prd-sql-1.public.00ba2bb543ff.database.windows.net,3342;Initial Catalog=epds01;User ID=epdsuser"
 		},
 		"Azure_WW_LABEL_COPY_properties_typeProperties_host": {
 			"type": "string",
@@ -674,6 +675,35 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/To_stock_inventory_report_DS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Temp_Files_Locations",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "to-stock-inventory.csv",
+						"folderPath": "TyReport1",
+						"container": "datafactoryfiles"
+					},
+					"columnDelimiter": "|",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Temp_Files_Locations')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/WirelessWareHouse_FTP_Source')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1183,174 +1213,6 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "_Inventory_Export2"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pricing_Table_3')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "TRO_Connect_epds01",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlMITable",
-				"schema": [
-					{
-						"name": "manufact",
-						"type": "varchar"
-					},
-					{
-						"name": "part",
-						"type": "varchar"
-					},
-					{
-						"name": "weblink",
-						"type": "varchar"
-					},
-					{
-						"name": "qty",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "delivery",
-						"type": "varchar"
-					},
-					{
-						"name": "oq1",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op1",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq2",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op2",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq3",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op3",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq4",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op4",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq5",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op5",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq6",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op6",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq7",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op7",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq8",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op8",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq9",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op9",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq10",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op10",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq11",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op11",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "vdesc",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "_Inventory_Export3"
 				}
 			},
 			"dependsOn": [

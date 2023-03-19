@@ -21,7 +21,8 @@
 		},
 		"TRO_Connect_epds01_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'TRO_Connect_epds01'"
+			"metadata": "Secure string for 'connectionString' of 'TRO_Connect_epds01'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tro-scus-prd-sql-1.public.00ba2bb543ff.database.windows.net,3342;Initial Catalog=epds01;User ID=epdsuser"
 		},
 		"Temp_Files_Locations_connectionString": {
 			"type": "secureString",
