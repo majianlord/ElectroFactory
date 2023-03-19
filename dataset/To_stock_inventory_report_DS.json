@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "To-stock inventory.csv",
+				"fileName": "To-stock-inventory.csv",
 				"folderPath": "TyReport1",
 				"container": "datafactoryfiles"
 			},
