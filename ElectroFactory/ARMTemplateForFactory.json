@@ -455,11 +455,11 @@
 							"method": "POST",
 							"headers": {},
 							"body": {
-								"FileName": "To-stock inventory.csv",
-								"EMailTo": "chood@cna-consulting.com",
-								"EmailSubject": "Subject OF Email",
+								"FileName": "To-Stock-Inventory.csv",
+								"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+								"EmailSubject": "Report Testing V324",
 								"PipeLineName": "ECIA_To_Text",
-								"FilePath": "datafactoryfiles/TyReport1/To-stock inventory.csv"
+								"FilePath": "/datafactoryfiles/TyReport1/to-stock-inventory.csv"
 							}
 						}
 					},
