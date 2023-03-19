@@ -58,6 +58,7 @@
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
 				"     folderPath: 'TyReport1',",
+				"     truncate: true,",
 				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
