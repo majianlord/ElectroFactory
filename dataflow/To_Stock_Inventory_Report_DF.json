@@ -64,7 +64,8 @@
 				"     columnNamesAsHeader: true,",
 				"     partitionFileNames:['to-stock-inventory.csv'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1) ~> sink1"
 			]
 		}
 	}
