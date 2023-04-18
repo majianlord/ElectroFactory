@@ -1896,7 +1896,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Monthly_on_15th')]",
+			"name": "[concat(parameters('factoryName'), '/Monthon15th')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1915,8 +1915,8 @@
 				"typeProperties": {
 					"recurrence": {
 						"frequency": "Month",
-						"interval": 15,
-						"startTime": "2023-02-07T20:39:00Z",
+						"interval": 1,
+						"startTime": "2023-04-18T20:39:00Z",
 						"timeZone": "UTC",
 						"schedule": {
 							"hours": [
