@@ -2140,6 +2140,277 @@
 				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]",
 				"[concat(variables('factoryId'), '/linkedServices/Temp_Files_Locations')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Weekly Data Flows')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "TRO_Connect_epds01",
+								"type": "LinkedServiceReference"
+							},
+							"name": "EPDS01AROpen"
+						},
+						{
+							"linkedService": {
+								"referenceName": "TRO_Connect_epds01",
+								"type": "LinkedServiceReference"
+							},
+							"name": "EPDSAPOpen"
+						},
+						{
+							"linkedService": {
+								"referenceName": "TRO_Connect_epds01",
+								"type": "LinkedServiceReference"
+							},
+							"name": "EPDSPOOpen"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							},
+							"name": "AROpen",
+							"description": "AR Open Report"
+						},
+						{
+							"linkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							},
+							"name": "APOpen"
+						},
+						{
+							"linkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							},
+							"name": "POOpen"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'query',",
+						"     store: 'sqlserver',",
+						"     query: 'select c.cust_no \\'Customer ID\\', c.cust_name \\'Customer Name\\', case when ((r.amt > 0) and (c.terms_code is null or c.terms_code = \\'\\')) then s.code_desc else s2.code_desc end as \\'Terms\\', \\nr.doc_date \\'Invoice Date\\', r.due_date \\'Due Date\\', r.amt \\'Balance\\'\\nfrom aropen r\\nleft join customer c on c.cust_no = r.cust_no\\nleft join codes s on s.code_id = c.terms_code and s.code_type = \\'T\\'\\nleft join inv_hedr h on h.inv_no = r.doc_no\\nleft join codes s2 on s2.code_id = h.terms_code and s2.code_type = \\'T\\' \\nwhere r.doc_type = \\'I\\' and r.doc_no not like \\'UK%\\'\\ngroup by r.aropen_rec, c.cust_no, c.cust_name, case when ((r.amt > 0) and (c.terms_code is null or c.terms_code = \\'\\')) then s.code_desc else s2.code_desc end, \\nr.doc_date, r.due_date, r.amt\\nunion all\\nselect  c.cust_no \\'Customer ID\\', c.cust_name \\'Customer Name\\',\\'NULL\\' as \\'Terms\\', \\nr.doc_date \\'Invoice Date\\', r.due_date \\'Due Date\\', r.amt \\'Balance\\'\\nfrom aropen r\\nleft join customer c on c.cust_no = r.cust_no\\nwhere r.doc_type = \\'I\\' and r.doc_no like \\'UK%\\'\\ngroup by r.aropen_rec, c.cust_no, c.cust_name, \\nr.doc_date, r.due_date, r.amt\\nunion all\\nselect c.cust_no \\'Customer ID\\', c.cust_name \\'Customer Name\\',\\'NULL\\' as \\'Terms\\', \\nr.doc_date \\'Invoice Date\\', r.due_date \\'Due Date\\', r.amt \\'Balance\\'\\nfrom aropen r\\nleft join customer c on c.cust_no = r.cust_no\\nwhere r.doc_type <> \\'I\\'\\ngroup by r.aropen_rec, c.cust_no, c.cust_name, \\nr.doc_date, r.due_date, r.amt\\n',",
+						"     isolationLevel: 'READ_UNCOMMITTED') ~> EPDS01AROpen",
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'query',",
+						"     store: 'sqlserver',",
+						"     query: 'select v.vend_no \\'Vendor ID\\', v.ap_name \\'Vendor Name\\', case when ((p.inv_amt > 0) and  (x.terms_code = \\'\\' or x.terms_code is null)) then t.code_desc else t2.code_desc end \\'Terms\\', p.invc_dt \\'Invoice Date\\', p.due_date \\'Due Date\\', p.inv_amt \\'Balance/Invoice Amount\\'\\nfrom apopen p\\nleft join aptrx x on x.voucher_no = p.voucher_no and x.reg_int_id = p.reg_int_id\\nleft join vendor v on v.vend_no = p.vend_no\\nleft join codes t on t.code_id = v.terms_code and t.code_type = \\'T\\'\\nleft join codes t2 on t2. code_id = x.terms_code and t2.code_type = \\'T\\'\\n',",
+						"     isolationLevel: 'READ_UNCOMMITTED') ~> EPDSAPOpen",
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'query',",
+						"     store: 'sqlserver',",
+						"     query: 'select h.vend_no \\'Vendor ID\\', v.ap_name \\'Vendor Name\\', t.code_desc \\'Terms\\', d.promise_dt \\'Ship/Invoice Date (Anticipated)\\', d.due_date \\'Due Date (Promised Date)\\', (d.bal_of_ord * d.unit_cost) \\'Remaining Amount (Cost)\\'\\nfrom po_detl d\\njoin po_hedr h on h.po_no = d.po_no\\njoin vendor v on v.vend_no = h.vend_no\\njoin codes t on t.code_id = h.terms_code and t.code_type = \\'T\\'\\nwhere h.status <> \\'V\\' and h.status <> \\'C\\' and h.status <> \\'C\\' and h.status <> \\'V\\' and d.bal_of_ord > 0 and h.shop_po = \\'N\\'\\n',",
+						"     isolationLevel: 'READ_UNCOMMITTED') ~> EPDSPOOpen",
+						"EPDS01AROpen sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'datafactoryfiles',",
+						"     folderPath: 'ARopen',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['ARopen.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> AROpen",
+						"EPDSAPOpen sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'datafactoryfiles',",
+						"     folderPath: 'APopen',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['APopen.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> APOpen",
+						"EPDSPOOpen sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'datafactoryfiles',",
+						"     folderPath: 'POopen',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['POopen.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> POOpen"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]",
+				"[concat(variables('factoryId'), '/linkedServices/Temp_Files_Locations')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Weekly Data Flow Runs",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Weekly Data Flows",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"EPDS01AROpen": {},
+									"EPDSAPOpen": {},
+									"EPDSPOOpen": {},
+									"AROpen": {},
+									"APOpen": {},
+									"POOpen": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "ARopen",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Weekly Data Flow Runs",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"FileName": "ARopen.csv",
+								"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+								"EmailSubject": "Electro AR Open Report",
+								"PipeLineName": "Electro AR Open Report",
+								"FilePath": "/datafactoryfiles/ARopen/ARopen.csv"
+							}
+						}
+					},
+					{
+						"name": "APopen",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "ARopen",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"FileName": "APopen.csv",
+								"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+								"EmailSubject": "Electro AP Open Report",
+								"PipeLineName": "Electro AP Open Report",
+								"FilePath": "/datafactoryfiles/APopen/APopen.csv"
+							}
+						}
+					},
+					{
+						"name": "POOpen",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "APopen",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"FileName": "POopen.csv",
+								"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+								"EmailSubject": "Electro PO Open Report",
+								"PipeLineName": "Electro PO Open Report",
+								"FilePath": "/datafactoryfiles/POopen/POopen.csv"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Weekly Data Flows')]"
+			]
 		}
 	]
 }
