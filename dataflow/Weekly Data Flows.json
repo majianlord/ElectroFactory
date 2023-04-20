@@ -79,7 +79,7 @@
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true,",
-				"     partitionFileNames:['AROpen.csv'],",
+				"     partitionFileNames:['ARopen.csv'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     partitionBy('hash', 1)) ~> AROpen",
@@ -92,9 +92,10 @@
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true,",
-				"     partitionFileNames:['APOpen.csv'],",
+				"     partitionFileNames:['APopen.csv'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> APOpen",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> APOpen",
 				"EPDSPOOpen sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'delimited',",
@@ -106,7 +107,8 @@
 				"     columnNamesAsHeader: true,",
 				"     partitionFileNames:['POopen.csv'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> POOpen"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> POOpen"
 			]
 		}
 	}
