@@ -74,7 +74,7 @@
 				"     validateSchema: false,",
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
-				"     folderPath: 'AROpen',",
+				"     folderPath: 'ARopen',",
 				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",

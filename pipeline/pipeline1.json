@@ -25,6 +25,38 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "Send Email Logic APP",
+				"description": "Send an email thought Azure Logic App",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Weekly Data Flow Runs",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+					"method": "POST",
+					"body": {
+						"FileName": "To-Stock-Inventory.csv",
+						"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+						"EmailSubject": "Report Testing V324",
+						"PipeLineName": "ECIA_To_Text",
+						"FilePath": "/datafactoryfiles/TyReport1/to-stock-inventory.csv"
+					}
+				}
 			}
 		],
 		"annotations": []
