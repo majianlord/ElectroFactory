@@ -27,7 +27,7 @@
 				}
 			},
 			{
-				"name": "Send Email Logic APP",
+				"name": "ARopen",
 				"description": "Send an email thought Azure Logic App",
 				"type": "WebActivity",
 				"dependsOn": [
@@ -64,7 +64,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Send Email Logic APP",
+						"activity": "ARopen",
 						"dependencyConditions": [
 							"Succeeded"
 						]
