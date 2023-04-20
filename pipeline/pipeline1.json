@@ -59,7 +59,7 @@
 				}
 			},
 			{
-				"name": "Send Email Logic APP_copy1",
+				"name": "APopen",
 				"description": "Send an email thought Azure Logic App",
 				"type": "WebActivity",
 				"dependsOn": [
@@ -96,7 +96,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Send Email Logic APP_copy1",
+						"activity": "APopen",
 						"dependencyConditions": [
 							"Succeeded"
 						]
