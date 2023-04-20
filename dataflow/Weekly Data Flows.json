@@ -17,6 +17,13 @@
 						"type": "LinkedServiceReference"
 					},
 					"name": "EPDSAPOpen"
+				},
+				{
+					"linkedService": {
+						"referenceName": "TRO_Connect_epds01",
+						"type": "LinkedServiceReference"
+					},
+					"name": "EPDSPOOpen"
 				}
 			],
 			"sinks": [
@@ -27,6 +34,20 @@
 					},
 					"name": "AROpen",
 					"description": "AR Open Report"
+				},
+				{
+					"linkedService": {
+						"referenceName": "Temp_Files_Locations",
+						"type": "LinkedServiceReference"
+					},
+					"name": "APOpen"
+				},
+				{
+					"linkedService": {
+						"referenceName": "Temp_Files_Locations",
+						"type": "LinkedServiceReference"
+					},
+					"name": "POOpen"
 				}
 			],
 			"transformations": [],
@@ -43,6 +64,12 @@
 				"     store: 'sqlserver',",
 				"     query: 'select v.vend_no \\'Vendor ID\\', v.ap_name \\'Vendor Name\\', case when ((p.inv_amt > 0) and  (x.terms_code = \\'\\' or x.terms_code is null)) then t.code_desc else t2.code_desc end \\'Terms\\', p.invc_dt \\'Invoice Date\\', p.due_date \\'Due Date\\', p.inv_amt \\'Balance/Invoice Amount\\'\\nfrom apopen p\\nleft join aptrx x on x.voucher_no = p.voucher_no and x.reg_int_id = p.reg_int_id\\nleft join vendor v on v.vend_no = p.vend_no\\nleft join codes t on t.code_id = v.terms_code and t.code_type = \\'T\\'\\nleft join codes t2 on t2. code_id = x.terms_code and t2.code_type = \\'T\\'\\n',",
 				"     isolationLevel: 'READ_UNCOMMITTED') ~> EPDSAPOpen",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'query',",
+				"     store: 'sqlserver',",
+				"     query: 'select h.vend_no \\'Vendor ID\\', v.ap_name \\'Vendor Name\\', t.code_desc \\'Terms\\', d.promise_dt \\'Ship/Invoice Date (Anticipated)\\', d.due_date \\'Due Date (Promised Date)\\', (d.bal_of_ord * d.unit_cost) \\'Remaining Amount (Cost)\\'\\nfrom po_detl d\\njoin po_hedr h on h.po_no = d.po_no\\njoin vendor v on v.vend_no = h.vend_no\\njoin codes t on t.code_id = h.terms_code and t.code_type = \\'T\\'\\nwhere h.status <> \\'V\\' and h.status <> \\'C\\' and h.status <> \\'C\\' and h.status <> \\'V\\' and d.bal_of_ord > 0 and h.shop_po = \\'N\\'\\n',",
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> EPDSPOOpen",
 				"EPDS01AROpen sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'delimited',",
@@ -54,7 +81,32 @@
 				"     columnNamesAsHeader: true,",
 				"     partitionFileNames:['AROpen.csv'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> AROpen"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> AROpen",
+				"EPDSAPOpen sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     container: 'datafactoryfiles',",
+				"     folderPath: 'APOpen',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['APOpen.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> APOpen",
+				"EPDSPOOpen sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     container: 'datafactoryfiles',",
+				"     folderPath: 'POOpen',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['POopen.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> POOpen"
 			]
 		}
 	}
