@@ -9,10 +9,18 @@
 						"referenceName": "TRO_Connect_epds01",
 						"type": "LinkedServiceReference"
 					},
-					"name": "source1"
+					"name": "ILSEE3"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "Temp_Files_Locations",
+						"type": "LinkedServiceReference"
+					},
+					"name": "ILSEE3output"
+				}
+			],
 			"transformations": [],
 			"scriptLines": [
 				"source(allowSchemaDrift: true,",
@@ -20,7 +28,20 @@
 				"     format: 'query',",
 				"     store: 'sqlserver',",
 				"     query: 'select concat(concat(\\'\"\\',part,\\'\",\\'), concat(\\'\"\\',vdesc,\\'\",\\'),\\'\"NE\",\"\\',sum(qty),\\'\"\\')\\nfrom _Inventory_Export3\\nwhere delivery not like \\'%On Order%\\'\\ngroup by part, vdesc\\n',",
-				"     isolationLevel: 'READ_UNCOMMITTED') ~> source1"
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> ILSEE3",
+				"ILSEE3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     container: 'datafactoryfiles',",
+				"     folderPath: 'ILSEE3',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['ILSEE3.txt'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> ILSEE3output"
 			]
 		}
 	}
