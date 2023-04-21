@@ -31,16 +31,18 @@
 				"     isolationLevel: 'READ_UNCOMMITTED') ~> ILSEE3",
 				"ILSEE3 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     emptyLinesAsHeader: 1,",
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
 				"     folderPath: 'ILSEE3',",
 				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
-				"     columnNamesAsHeader: true,",
+				"     columnNamesAsHeader: false,",
 				"     partitionFileNames:['ILSEE3.txt'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     quoteAll: true,",
 				"     partitionBy('hash', 1)) ~> ILSEE3output"
 			]
 		}
