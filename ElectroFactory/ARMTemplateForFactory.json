@@ -2263,7 +2263,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"name": "[concat(parameters('factoryName'), '/Weekly Reports')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2328,7 +2328,7 @@
 							"headers": {},
 							"body": {
 								"FileName": "ARopen.csv",
-								"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
 								"EmailSubject": "Electro AR Open Report",
 								"PipeLineName": "Electro AR Open Report",
 								"FilePath": "/datafactoryfiles/ARopen/ARopen.csv"
@@ -2361,7 +2361,7 @@
 							"headers": {},
 							"body": {
 								"FileName": "APopen.csv",
-								"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
 								"EmailSubject": "Electro AP Open Report",
 								"PipeLineName": "Electro AP Open Report",
 								"FilePath": "/datafactoryfiles/APopen/APopen.csv"
@@ -2394,7 +2394,7 @@
 							"headers": {},
 							"body": {
 								"FileName": "POopen.csv",
-								"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
 								"EmailSubject": "Electro PO Open Report",
 								"PipeLineName": "Electro PO Open Report",
 								"FilePath": "/datafactoryfiles/POopen/POopen.csv"
@@ -2410,6 +2410,42 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/Weekly Data Flows')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Weekly Reports saterday')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Run the weekly reports and email them",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Weekly Reports",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2023-04-20T14:28:00",
+						"timeZone": "Eastern Standard Time",
+						"schedule": {
+							"weekDays": [
+								"Saturday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Weekly Reports')]"
 			]
 		}
 	]
