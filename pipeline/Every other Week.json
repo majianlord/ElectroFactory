@@ -51,7 +51,7 @@
 					"method": "POST",
 					"body": {
 						"FileName": "ILSEE3.txt",
-						"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+						"EMailTo": "alon@stealthaerospace.com;Solyman.Omar@fdhaero.com;Ty.Diedrick@electroenterprises.com;Nathan.Little@electroenterprises.com",
 						"EmailSubject": "Electro ILSEE3 Report",
 						"PipeLineName": "Electro ILSEE3 Report",
 						"FilePath": "/datafactoryfiles/ILSEE3/ILSEE3.txt"
