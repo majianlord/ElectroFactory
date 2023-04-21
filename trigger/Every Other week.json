@@ -1,0 +1,29 @@
+{
+	"name": "Every Other week",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Every other Week",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Week",
+				"interval": 2,
+				"startTime": "2023-04-29T15:28:00",
+				"timeZone": "Eastern Standard Time",
+				"schedule": {
+					"weekDays": [
+						"Saturday"
+					]
+				}
+			}
+		}
+	}
+}
