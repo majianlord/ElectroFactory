@@ -135,6 +135,31 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Every Other week')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 2,
+						"startTime": "2023-04-29T15:28:00",
+						"timeZone": "Eastern Standard Time",
+						"schedule": {
+							"weekDays": [
+								"Saturday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Azure_Wireless_WareHouse_Share')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1045,174 +1070,6 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "_Inventory_Export1"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pricing_Table_2')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "TRO_Connect_epds01",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlMITable",
-				"schema": [
-					{
-						"name": "manufact",
-						"type": "varchar"
-					},
-					{
-						"name": "part",
-						"type": "varchar"
-					},
-					{
-						"name": "weblink",
-						"type": "varchar"
-					},
-					{
-						"name": "qty",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "delivery",
-						"type": "varchar"
-					},
-					{
-						"name": "oq1",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op1",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq2",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op2",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq3",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op3",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq4",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op4",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq5",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op5",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq6",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op6",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq7",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op7",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq8",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op8",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq9",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op9",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq10",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op10",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "oq11",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "op11",
-						"type": "decimal",
-						"precision": 19,
-						"scale": 3
-					},
-					{
-						"name": "vdesc",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "_Inventory_Export2"
 				}
 			},
 			"dependsOn": [

@@ -92,10 +92,12 @@
 									"PricingTable1": {},
 									"PricingTable2": {},
 									"PricingTable3": {},
+									"ILSEE3": {},
 									"sink1": {},
 									"sink2": {},
 									"sink3": {},
-									"sink4": {}
+									"sink4": {},
+									"ILSEE3out": {}
 								}
 							},
 							"staging": {},
@@ -112,6 +114,18 @@
 						"dependsOn": [
 							{
 								"activity": "Copy data3",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Copy data4",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Copy data2",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -140,7 +154,7 @@
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Copy data4",
+								"activity": "ILSEE3",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -207,7 +221,7 @@
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Copy data2",
+								"activity": "ILSEE3",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -274,7 +288,7 @@
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Data flow1",
+								"activity": "ILSEE3",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -397,6 +411,39 @@
 									}
 								}
 							]
+						}
+					},
+					{
+						"name": "ILSEE3",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Data flow1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"FileName": "ILSEE3.txt",
+								"EMailTo": "alon@stealthaerospace.com;Solyman.Omar@fdhaero.com;Ty.Diedrick@electroenterprises.com;Nathan.Little@electroenterprises.com",
+								"EmailSubject": "Electro ILSEE3 Report",
+								"PipeLineName": "Electro ILSEE3 Report",
+								"FilePath": "/datafactoryfiles/ILSEE3/ILSEE3.txt"
+							}
 						}
 					}
 				],
@@ -2131,16 +2178,8 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "Every other Week",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
+				"runtimeState": "Stopped",
+				"pipelines": [],
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
@@ -2156,9 +2195,7 @@
 					}
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/Every other Week')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Monthon15th')]",
@@ -2257,7 +2294,7 @@
 						"frequency": "Week",
 						"interval": 1,
 						"startTime": "2021-09-12T19:14:00",
-						"timeZone": "Central Standard Time",
+						"timeZone": "Eastern Standard Time",
 						"schedule": {
 							"minutes": [
 								0
@@ -2311,6 +2348,13 @@
 								"type": "DatasetReference"
 							},
 							"name": "PricingTable3"
+						},
+						{
+							"linkedService": {
+								"referenceName": "TRO_Connect_epds01",
+								"type": "LinkedServiceReference"
+							},
+							"name": "ILSEE3"
 						}
 					],
 					"sinks": [
@@ -2341,6 +2385,13 @@
 								"type": "LinkedServiceReference"
 							},
 							"name": "sink4"
+						},
+						{
+							"linkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							},
+							"name": "ILSEE3out"
 						}
 					],
 					"transformations": [
@@ -2351,7 +2402,7 @@
 							"name": "Sort1"
 						}
 					],
-					"script": "source(output(\n\t\tlin_no as integer,\n\t\tout_text as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'NONE',\n\tformat: 'table') ~> PrimarySelect\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable1\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable2\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable3\nSort1 select(mapColumn(\n\t\tout_text\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nPrimarySelect sort(asc(lin_no, true)) ~> Sort1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'ECIA',\n\tcolumnDelimiter: '',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: false,\n\tpartitionFileNames:['ECIAGlobalStandardRegion1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1\nPricingTable1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink2\nPricingTable2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel2.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink3\nPricingTable3 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel3.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink4"
+					"script": "source(output(\n\t\tlin_no as integer,\n\t\tout_text as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'NONE',\n\tformat: 'table') ~> PrimarySelect\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable1\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable2\nsource(output(\n\t\tmanufact as string,\n\t\tpart as string,\n\t\tweblink as string,\n\t\tqty as integer,\n\t\tdelivery as string,\n\t\toq1 as integer,\n\t\top1 as decimal(19,3),\n\t\toq2 as integer,\n\t\top2 as decimal(19,3),\n\t\toq3 as integer,\n\t\top3 as decimal(19,3),\n\t\toq4 as integer,\n\t\top4 as decimal(19,3),\n\t\toq5 as integer,\n\t\top5 as decimal(19,3),\n\t\toq6 as integer,\n\t\top6 as decimal(19,3),\n\t\toq7 as integer,\n\t\top7 as decimal(19,3),\n\t\toq8 as integer,\n\t\top8 as decimal(19,3),\n\t\toq9 as integer,\n\t\top9 as decimal(19,3),\n\t\toq10 as integer,\n\t\top10 as decimal(19,3),\n\t\toq11 as integer,\n\t\top11 as decimal(19,3),\n\t\tvdesc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> PricingTable3\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'query',\n\tstore: 'sqlserver',\n\tquery: 'select part,vdesc,\\'NE\\' as NE ,sum(qty) AS SUM\\nfrom _Inventory_Export3\\nwhere delivery not like \\'%On Order%\\'\\ngroup by part, vdesc',\n\tisolationLevel: 'READ_UNCOMMITTED') ~> ILSEE3\nSort1 select(mapColumn(\n\t\tout_text\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nPrimarySelect sort(asc(lin_no, true)) ~> Sort1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'ECIA',\n\tcolumnDelimiter: '',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: false,\n\tpartitionFileNames:['ECIAGlobalStandardRegion1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1\nPricingTable1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel1.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink2\nPricingTable2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel2.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink3\nPricingTable3 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'PriceFiles',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['PricingLevel3.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink4\nILSEE3 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\temptyLinesAsHeader: 1,\n\tformat: 'delimited',\n\tcontainer: 'datafactoryfiles',\n\tfolderPath: 'ILSEE3',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionFileNames:['ILSEE3.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> ILSEE3out"
 				}
 			},
 			"dependsOn": [
@@ -2359,6 +2410,7 @@
 				"[concat(variables('factoryId'), '/datasets/Pricing_Table_1')]",
 				"[concat(variables('factoryId'), '/datasets/Pricing_Table_2')]",
 				"[concat(variables('factoryId'), '/datasets/Pricing_Table_3')]",
+				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]",
 				"[concat(variables('factoryId'), '/linkedServices/Temp_Files_Locations')]"
 			]
 		},
