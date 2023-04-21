@@ -505,6 +505,156 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Weekly Reports')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Weekly Data Flow Runs",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Weekly Data Flows",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"EPDS01AROpen": {},
+									"EPDSAPOpen": {},
+									"EPDSPOOpen": {},
+									"AROpen": {},
+									"APOpen": {},
+									"POOpen": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "ARopen",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Weekly Data Flow Runs",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"FileName": "ARopen.csv",
+								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
+								"EmailSubject": "Electro AR Open Report",
+								"PipeLineName": "Electro AR Open Report",
+								"FilePath": "/datafactoryfiles/ARopen/ARopen.csv"
+							}
+						}
+					},
+					{
+						"name": "APopen",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "ARopen",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"FileName": "APopen.csv",
+								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
+								"EmailSubject": "Electro AP Open Report",
+								"PipeLineName": "Electro AP Open Report",
+								"FilePath": "/datafactoryfiles/APopen/APopen.csv"
+							}
+						}
+					},
+					{
+						"name": "POOpen",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "APopen",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"FileName": "POopen.csv",
+								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
+								"EmailSubject": "Electro PO Open Report",
+								"PipeLineName": "Electro PO Open Report",
+								"FilePath": "/datafactoryfiles/POopen/POopen.csv"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Weekly Data Flows')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/WirelessWareHouse_Labels')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1934,6 +2084,42 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Weekly Reports saterday')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Run the weekly reports and email them",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Weekly Reports",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2023-04-20T14:28:00",
+						"timeZone": "Eastern Standard Time",
+						"schedule": {
+							"weekDays": [
+								"Saturday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Weekly Reports')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Weekly Saterday 17pm')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -2263,13 +2449,67 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Weekly Reports')]",
+			"name": "[concat(parameters('factoryName'), '/Every other Week')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "TRO_Connect_epds01",
+								"type": "LinkedServiceReference"
+							},
+							"name": "ILSEE3"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							},
+							"name": "ILSEE3output"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'query',",
+						"     store: 'sqlserver',",
+						"     query: 'select concat(concat(\\'\"\\',part,\\'\",\\'), concat(\\'\"\\',vdesc,\\'\",\\'),\\'\"NE\",\"\\',sum(qty),\\'\"\\')\\nfrom _Inventory_Export3\\nwhere delivery not like \\'%On Order%\\'\\ngroup by part, vdesc\\n',",
+						"     isolationLevel: 'READ_UNCOMMITTED') ~> ILSEE3",
+						"ILSEE3 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'datafactoryfiles',",
+						"     folderPath: 'ILSEE3',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['ILSEE3.txt'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> ILSEE3output"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]",
+				"[concat(variables('factoryId'), '/linkedServices/Temp_Files_Locations')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Every other Week')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Weekly Data Flow Runs",
+						"name": "Every other Weekly Data Flow Runs",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -2282,16 +2522,12 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Weekly Data Flows",
+								"referenceName": "Every other Week",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"EPDS01AROpen": {},
-									"EPDSAPOpen": {},
-									"EPDSPOOpen": {},
-									"AROpen": {},
-									"APOpen": {},
-									"POOpen": {}
+									"ILSEE3": {},
+									"ILSEE3output": {}
 								}
 							},
 							"staging": {},
@@ -2303,12 +2539,12 @@
 						}
 					},
 					{
-						"name": "ARopen",
+						"name": "ILSEE3",
 						"description": "Send an email thought Azure Logic App",
 						"type": "WebActivity",
 						"dependsOn": [
 							{
-								"activity": "Weekly Data Flow Runs",
+								"activity": "Every other Weekly Data Flow Runs",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -2327,77 +2563,11 @@
 							"method": "POST",
 							"headers": {},
 							"body": {
-								"FileName": "ARopen.csv",
-								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
-								"EmailSubject": "Electro AR Open Report",
-								"PipeLineName": "Electro AR Open Report",
-								"FilePath": "/datafactoryfiles/ARopen/ARopen.csv"
-							}
-						}
-					},
-					{
-						"name": "APopen",
-						"description": "Send an email thought Azure Logic App",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "ARopen",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"FileName": "APopen.csv",
-								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
-								"EmailSubject": "Electro AP Open Report",
-								"PipeLineName": "Electro AP Open Report",
-								"FilePath": "/datafactoryfiles/APopen/APopen.csv"
-							}
-						}
-					},
-					{
-						"name": "POOpen",
-						"description": "Send an email thought Azure Logic App",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "APopen",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"FileName": "POopen.csv",
-								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
-								"EmailSubject": "Electro PO Open Report",
-								"PipeLineName": "Electro PO Open Report",
-								"FilePath": "/datafactoryfiles/POopen/POopen.csv"
+								"FileName": "ILSEE3.txt",
+								"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+								"EmailSubject": "Electro ILSEE3 Report",
+								"PipeLineName": "Electro ILSEE3 Report",
+								"FilePath": "/datafactoryfiles/ILSEE3/ILSEE3.txt"
 							}
 						}
 					}
@@ -2409,43 +2579,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Weekly Data Flows')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Weekly Reports saterday')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Run the weekly reports and email them",
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "Weekly Reports",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Week",
-						"interval": 1,
-						"startTime": "2023-04-20T14:28:00",
-						"timeZone": "Eastern Standard Time",
-						"schedule": {
-							"weekDays": [
-								"Saturday"
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/Weekly Reports')]"
+				"[concat(variables('factoryId'), '/dataflows/Every other Week')]"
 			]
 		}
 	]
