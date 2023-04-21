@@ -42,6 +42,18 @@
 						"dependencyConditions": [
 							"Succeeded"
 						]
+					},
+					{
+						"activity": "Copy data4",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Copy data2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
 				],
 				"policy": {
@@ -66,7 +78,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Copy data4",
+						"activity": "ILSEE3",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -131,7 +143,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Copy data2",
+						"activity": "ILSEE3",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -196,7 +208,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Data flow1",
+						"activity": "ILSEE3",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -317,6 +329,38 @@
 							}
 						}
 					]
+				}
+			},
+			{
+				"name": "ILSEE3",
+				"description": "Send an email thought Azure Logic App",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Data flow1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+					"method": "POST",
+					"body": {
+						"FileName": "ILSEE3.txt",
+						"EMailTo": "alon@stealthaerospace.com;Solyman.Omar@fdhaero.com;Ty.Diedrick@electroenterprises.com;Nathan.Little@electroenterprises.com",
+						"EmailSubject": "Electro ILSEE3 Report",
+						"PipeLineName": "Electro ILSEE3 Report",
+						"FilePath": "/datafactoryfiles/ILSEE3/ILSEE3.txt"
+					}
 				}
 			}
 		],
