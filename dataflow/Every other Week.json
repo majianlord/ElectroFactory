@@ -27,7 +27,7 @@
 				"     validateSchema: false,",
 				"     format: 'query',",
 				"     store: 'sqlserver',",
-				"     query: 'select Trim(part),Trim(vdesc),\\'NE\\' as NE ,Trim(sum(qty)) AS SUM\\nfrom _Inventory_Export3\\nwhere delivery not like \\'%On Order%\\'\\ngroup by part, vdesc',",
+				"     query: 'select Trim(part),Trim(vdesc),\\'NE\\' as NE ,sum(qty) AS SUM\\nfrom _Inventory_Export3\\nwhere delivery not like \\'%On Order%\\'\\ngroup by part, vdesc',",
 				"     isolationLevel: 'READ_UNCOMMITTED') ~> ILSEE3",
 				"ILSEE3 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
