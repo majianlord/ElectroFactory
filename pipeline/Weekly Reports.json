@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "Weekly Reports",
 	"properties": {
 		"activities": [
 			{
@@ -51,7 +51,7 @@
 					"method": "POST",
 					"body": {
 						"FileName": "ARopen.csv",
-						"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+						"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
 						"EmailSubject": "Electro AR Open Report",
 						"PipeLineName": "Electro AR Open Report",
 						"FilePath": "/datafactoryfiles/ARopen/ARopen.csv"
@@ -83,7 +83,7 @@
 					"method": "POST",
 					"body": {
 						"FileName": "APopen.csv",
-						"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+						"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
 						"EmailSubject": "Electro AP Open Report",
 						"PipeLineName": "Electro AP Open Report",
 						"FilePath": "/datafactoryfiles/APopen/APopen.csv"
@@ -115,7 +115,7 @@
 					"method": "POST",
 					"body": {
 						"FileName": "POopen.csv",
-						"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+						"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
 						"EmailSubject": "Electro PO Open Report",
 						"PipeLineName": "Electro PO Open Report",
 						"FilePath": "/datafactoryfiles/POopen/POopen.csv"
