@@ -1,0 +1,27 @@
+{
+	"name": "Every other Week",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "TRO_Connect_epds01",
+						"type": "LinkedServiceReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'query',",
+				"     store: 'sqlserver',",
+				"     query: 'select concat(concat(\\'\"\\',part,\\'\",\\'), concat(\\'\"\\',vdesc,\\'\",\\'),\\'\"NE\",\"\\',sum(qty),\\'\"\\')\\nfrom _Inventory_Export3\\nwhere delivery not like \\'%On Order%\\'\\ngroup by part, vdesc\\n',",
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> source1"
+			]
+		}
+	}
+}
