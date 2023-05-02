@@ -418,7 +418,7 @@
 						"     escapeChar: '\\\\',",
 						"     quoteChar: '\\\"',",
 						"     columnNamesAsHeader: true,",
-						"     partitionFileNames:[(concat('Electro_Transaction_',toString(currentDate(), 'MM_dd_yyyy'), '.csv'))],",
+						"     partitionFileNames:[($FileNAme)],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     quoteAll: true) ~> sink1"
