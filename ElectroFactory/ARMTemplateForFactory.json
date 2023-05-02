@@ -544,7 +544,7 @@
 							"method": "POST",
 							"headers": {},
 							"body": {
-								"value": "@concat('{\"FileName\":\"ILSEE3.txt\",\"EMailTo\":\"Ty.Diedrickelectroenterprises.com;choodcna-consulting.com\",\"EmailSubject\":\"Electro Transactions Report\",\"PipeLineName\":\"Electro Transactions Report\",\"FilePath\":\"/datafactoryfiles/Transactions/',variables('Transact File Name'),'\"}')",
+								"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"EMailTo\":\"Ty.Diedrickelectroenterprises.com;choodcna-consulting.com\",\"EmailSubject\":\"Electro Transactions Report\",\"PipeLineName\":\"Electro Transactions Report\",\"FilePath\":\"/datafactoryfiles/Transactions/',variables('Transact File Name'),'\"}')",
 								"type": "Expression"
 							}
 						}
