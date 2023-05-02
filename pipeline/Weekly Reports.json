@@ -123,6 +123,11 @@
 				}
 			}
 		],
+		"variables": {
+			"Transact File Name": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
