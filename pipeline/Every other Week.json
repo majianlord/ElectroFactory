@@ -24,7 +24,13 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "Every other Week",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"parameters": {
+							"FileNAme": {
+								"value": "'@{variables('Transact File Name')}'",
+								"type": "Expression"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
@@ -57,7 +63,7 @@
 					"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 					"method": "POST",
 					"body": {
-						"value": "\"{\"FileName\":\"ILSEE3.txt\",\"EMailTo\":\"Ty.Diedrick@electroenterprises.com';chood@cna-consulting.com\",\"EmailSubject\":\"Electro TRANSACTION Report\",\"PipeLineName\":\"Electro TRANSACTION Report\",\"FilePath\":\"/datafactoryfiles/Transaction/\"concat('Electro_Transaction_',toString(currentDate(), 'MM_dd_yyyy'), '.csv')\"}\"\"",
+						"value": "@concat('{\"FileName\":\"ILSEE3.txt\",\"EMailTo\":\"Ty.Diedrickelectroenterprises.com;choodcna-consulting.com\",\"EmailSubject\":\"Electro TRANSACTION Report\",\"PipeLineName\":\"Electro TRANSACTION Report\",\"FilePath\":\"/datafactoryfiles/Transaction/',variables('Transact File Name'),'\"}')",
 						"type": "Expression"
 					}
 				}
