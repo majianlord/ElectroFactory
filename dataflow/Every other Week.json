@@ -23,6 +23,9 @@
 			],
 			"transformations": [],
 			"scriptLines": [
+				"parameters{",
+				"     FileNAme as string",
+				"}",
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'query',",
