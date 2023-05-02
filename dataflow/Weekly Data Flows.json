@@ -140,11 +140,12 @@
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true,",
-				"     partitionFileNames:[(@concat('Electro_Transaction_',toString(currentDate(),'MM_dd_yyyy'),'.csv')\r",
+				"     partitionFileNames:[(concat('Electro_Transaction_',toString(currentDate(), 'MM_dd_yyyy'), '.csv')\r",
 				")],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     quoteAll: true) ~> WeeklyTransactioNFileSink"
+				"     quoteAll: true,",
+				"     partitionBy('hash', 1)) ~> WeeklyTransactioNFileSink"
 			]
 		}
 	}
