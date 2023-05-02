@@ -482,7 +482,7 @@
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
-								"activity": "Set variable1",
+								"activity": "Set Email Value",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -544,13 +544,13 @@
 							"method": "POST",
 							"headers": {},
 							"body": {
-								"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"EMailTo\":\"Ty.Diedrickelectroenterprises.com;choodcna-consulting.com\",\"EmailSubject\":\"Electro Transactions Report\",\"PipeLineName\":\"Electro Transactions Report\",\"FilePath\":\"/datafactoryfiles/Transactions/',variables('Transact File Name'),'\"}')",
+								"value": "@variables('Set Email Value')",
 								"type": "Expression"
 							}
 						}
 					},
 					{
-						"name": "Set variable1",
+						"name": "Set File Name Value",
 						"type": "SetVariable",
 						"dependsOn": [],
 						"userProperties": [],
@@ -558,6 +558,26 @@
 							"variableName": "Transact File Name",
 							"value": {
 								"value": "@concat('Electro_Transaction_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set Email Value",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set File Name Value",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Set Email Value",
+							"value": {
+								"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"EMailTo\":\"Ty.Diedrickelectroenterprises.com;choodcna-consulting.com\",\"EmailSubject\":\"Electro Transactions Report\",\"PipeLineName\":\"Electro Transactions Report\",\"FilePath\":\"/datafactoryfiles/Transactions/',variables('Transact File Name'),'\"}')",
 								"type": "Expression"
 							}
 						}
@@ -569,6 +589,9 @@
 				},
 				"variables": {
 					"Transact File Name": {
+						"type": "String"
+					},
+					"Set Email Value": {
 						"type": "String"
 					}
 				},
