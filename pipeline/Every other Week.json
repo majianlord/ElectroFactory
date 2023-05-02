@@ -5,7 +5,14 @@
 			{
 				"name": "Every other Weekly Data Flow Runs",
 				"type": "ExecuteDataFlow",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -54,8 +61,26 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Transact File Name",
+					"value": {
+						"value": "@concat('Electro_Transaction_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"variables": {
+			"Transact File Name": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
