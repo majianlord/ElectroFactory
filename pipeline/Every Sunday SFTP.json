@@ -1,5 +1,5 @@
 {
-	"name": "Every other Week",
+	"name": "Every Sunday SFTP",
 	"properties": {
 		"activities": [
 			{
@@ -23,7 +23,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Every other Week",
+						"referenceName": "Every Sunday SFTP",
 						"type": "DataFlowReference",
 						"parameters": {
 							"FileNAme": {
@@ -69,7 +69,7 @@
 				}
 			},
 			{
-				"name": "Set File Name Value",
+				"name": "Transact File Name",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"userProperties": [],
@@ -86,7 +86,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Set File Name Value",
+						"activity": "Transact File Name",
 						"dependencyConditions": [
 							"Succeeded"
 						]
