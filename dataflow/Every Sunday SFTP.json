@@ -134,7 +134,7 @@
 				"     validateSchema: false,",
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
-				"     folderPath: 'Item',",
+				"     folderPath: 'Transfer',",
 				"     columnDelimiter: '|',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
@@ -148,7 +148,7 @@
 				"     validateSchema: false,",
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
-				"     folderPath: 'Customer',",
+				"     folderPath: 'Transfer',",
 				"     columnDelimiter: '|',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
@@ -162,7 +162,7 @@
 				"     validateSchema: false,",
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
-				"     folderPath: 'Stocking',",
+				"     folderPath: 'Transfer',",
 				"     truncate: true,",
 				"     columnDelimiter: '|',",
 				"     escapeChar: '\\\\',",
@@ -170,12 +170,13 @@
 				"     columnNamesAsHeader: true,",
 				"     partitionFileNames:[($StockingFile)],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> StockingFileOut",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> StockingFileOut",
 				"InventoryFile sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
-				"     folderPath: 'Inventory',",
+				"     folderPath: 'Transfer',",
 				"     columnDelimiter: '|',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
@@ -183,7 +184,8 @@
 				"     partitionFileNames:[($InventoryFile)],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     quoteAll: true) ~> InventoryFileOut"
+				"     quoteAll: true,",
+				"     partitionBy('hash', 1)) ~> InventoryFileOut"
 			]
 		}
 	}
