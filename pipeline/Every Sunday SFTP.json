@@ -86,7 +86,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Transact File Name",
+						"activity": "Inventory File Name",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -96,7 +96,87 @@
 				"typeProperties": {
 					"variableName": "Set Email Value",
 					"value": {
-						"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"EMailTo\":\"Ty.Diedrickelectroenterprises.com;choodcna-consulting.com\",\"EmailSubject\":\"Electro Transactions Report\",\"PipeLineName\":\"Electro Transactions Report\",\"FilePath\":\"/datafactoryfiles/Transactions/',variables('Transact File Name'),'\"}')",
+						"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"PipeLineName\":\"Electro Transactions Report\",\"FilePath\":\"/datafactoryfiles/Transaction/',variables('Transact File Name'),'\"}')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Inventory File Name",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Stocking Items File Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Transact File Name",
+					"value": {
+						"value": "@concat('Electro_INVENTORY_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Stocking Items File Name",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Customer Master File Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Transact File Name",
+					"value": {
+						"value": "@concat('Electro_STOCKING_ITEMS_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Customer Master File Name",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Item FIle Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Transact File Name",
+					"value": {
+						"value": "@concat('Electro_CUSTOMER_MASTER_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Item FIle Name",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Transact File Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Transact File Name",
+					"value": {
+						"value": "@concat('Electro_ITEM_MASTER_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 						"type": "Expression"
 					}
 				}
