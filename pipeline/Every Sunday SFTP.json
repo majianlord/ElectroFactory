@@ -29,6 +29,26 @@
 							"FileNAme": {
 								"value": "'@{variables('Transact File Name')}'",
 								"type": "Expression"
+							},
+							"TransactionFile": {
+								"value": "'@{variables('Transact File Name')}'",
+								"type": "Expression"
+							},
+							"ItemFile": {
+								"value": "'@{variables('Item File Name')}'",
+								"type": "Expression"
+							},
+							"CustomerFile": {
+								"value": "'@{variables('Customer File Name')}'",
+								"type": "Expression"
+							},
+							"StockingFile": {
+								"value": "'@{variables('Stocking File Name')}'",
+								"type": "Expression"
+							},
+							"InventoryFile": {
+								"value": "'@{variables('Inventory File Name')}'",
+								"type": "Expression"
 							}
 						}
 					},
