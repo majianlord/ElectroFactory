@@ -205,7 +205,7 @@
 					"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 					"method": "POST",
 					"body": {
-						"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Item File Name'),'\"}')",
+						"value": "@concat('{\"FileName\":\"',variables('Item File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Item File Name'),'\"}')",
 						"type": "Expression"
 					}
 				}
@@ -234,7 +234,7 @@
 					"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 					"method": "POST",
 					"body": {
-						"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Customer File Name'),'\"}')",
+						"value": "@concat('{\"FileName\":\"',variables('Customer File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Customer File Name'),'\"}')",
 						"type": "Expression"
 					}
 				}
@@ -263,7 +263,7 @@
 					"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 					"method": "POST",
 					"body": {
-						"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Inventory File Name'),'\"}')",
+						"value": "@concat('{\"FileName\":\"',variables('Inventory File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Inventory File Name'),'\"}')",
 						"type": "Expression"
 					}
 				}
@@ -292,7 +292,7 @@
 					"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 					"method": "POST",
 					"body": {
-						"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Stocking File Name'),'\"}')",
+						"value": "@concat('{\"FileName\":\"',variables('Stocking File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Stocking File Name'),'\"}')",
 						"type": "Expression"
 					}
 				}
