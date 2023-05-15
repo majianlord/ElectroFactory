@@ -96,7 +96,7 @@
 				"typeProperties": {
 					"variableName": "Set Email Value",
 					"value": {
-						"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"PipeLineName\":\"Electro Transactions Report\",\"FilePath\":\"/datafactoryfiles/Transaction/',variables('Transact File Name'),'\"}')",
+						"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Transact File Name'),'\"}')",
 						"type": "Expression"
 					}
 				}
