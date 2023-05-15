@@ -7,7 +7,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Set Email Value",
+						"activity": "Inventory File Name",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -40,7 +40,7 @@
 				}
 			},
 			{
-				"name": "ILSEE3",
+				"name": "TRANSACTION SFTP",
 				"description": "Send an email thought Azure Logic App",
 				"type": "WebActivity",
 				"dependsOn": [
@@ -60,10 +60,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+					"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 					"method": "POST",
 					"body": {
-						"value": "@variables('Set Email Value')",
+						"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Transact File Name'),'\"}')",
 						"type": "Expression"
 					}
 				}
@@ -77,26 +77,6 @@
 					"variableName": "Transact File Name",
 					"value": {
 						"value": "@concat('Electro_Transaction_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "Set Email Value",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Inventory File Name",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "Set Email Value",
-					"value": {
-						"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/Transfer/',variables('Transact File Name'),'\"}')",
 						"type": "Expression"
 					}
 				}
