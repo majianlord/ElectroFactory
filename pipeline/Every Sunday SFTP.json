@@ -114,7 +114,7 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "Transact File Name",
+					"variableName": "Inventory File Name",
 					"value": {
 						"value": "@concat('Electro_INVENTORY_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 						"type": "Expression"
@@ -134,7 +134,7 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "Transact File Name",
+					"variableName": "Stocking File Name",
 					"value": {
 						"value": "@concat('Electro_STOCKING_ITEMS_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 						"type": "Expression"
@@ -154,7 +154,7 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "Transact File Name",
+					"variableName": "Customer File Name",
 					"value": {
 						"value": "@concat('Electro_CUSTOMER_MASTER_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 						"type": "Expression"
@@ -174,7 +174,7 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "Transact File Name",
+					"variableName": "Item File Name",
 					"value": {
 						"value": "@concat('Electro_ITEM_MASTER_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 						"type": "Expression"
@@ -187,6 +187,18 @@
 				"type": "String"
 			},
 			"Set Email Value": {
+				"type": "String"
+			},
+			"Item File Name": {
+				"type": "String"
+			},
+			"Customer File Name": {
+				"type": "String"
+			},
+			"Stocking File Name": {
+				"type": "String"
+			},
+			"Inventory File Name": {
 				"type": "String"
 			}
 		},
