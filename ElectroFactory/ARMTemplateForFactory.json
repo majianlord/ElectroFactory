@@ -846,7 +846,7 @@
 							"headers": {},
 							"body": {
 								"FileName": "To-Stock-Inventory.csv",
-								"EMailTo": "chood@cna-consulting.com;Ty.Diedrick@electroenterprises.com",
+								"EMailTo": "Ty.Diedrick@electroenterprises.com",
 								"EmailSubject": "Report Testing V324",
 								"PipeLineName": "ECIA_To_Text",
 								"FilePath": "/datafactoryfiles/TyReport1/to-stock-inventory.csv"
@@ -3145,6 +3145,48 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]",
 				"[concat(variables('factoryId'), '/linkedServices/Temp_Files_Locations')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Sunday Afternoon Trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Run the Reports every Sunday Afternoon at 3:15 to try and ensure we dont hit any of the Azure Downtimes or scheduled SQL Maintance",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Every Sunday SFTP",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2023-05-16T11:53:00",
+						"timeZone": "Central Standard Time",
+						"schedule": {
+							"minutes": [
+								15
+							],
+							"hours": [
+								3
+							],
+							"weekDays": [
+								"Sunday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Every Sunday SFTP')]"
 			]
 		}
 	]
