@@ -565,7 +565,6 @@
 						"     format: 'delimited',",
 						"     container: 'datafactoryfiles',",
 						"     folderPath: 'sftpfiles',",
-						"     truncate: true,",
 						"     columnDelimiter: '|',",
 						"     escapeChar: '\\\\',",
 						"     quoteChar: '\\\"',",
@@ -573,6 +572,7 @@
 						"     partitionFileNames:[($stockingfile)],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
+						"     quoteAll: true,",
 						"     saveOrder: 4,",
 						"     partitionBy('hash', 1)) ~> StockingFileOut",
 						"InventoryFile sink(allowSchemaDrift: true,",
@@ -889,8 +889,7 @@
 									"CustomerFileOut": {},
 									"StockingFileOut": {},
 									"InventoryFileOut": {}
-								},
-								"linkedServiceParameters": {}
+								}
 							},
 							"staging": {},
 							"compute": {
@@ -1244,20 +1243,6 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
-				},
-				"variables": {
-					"Item File Name": {
-						"type": "String"
-					},
-					"Customer File Name": {
-						"type": "String"
-					},
-					"Stocking File Name": {
-						"type": "String"
-					},
-					"Inventory File Name": {
-						"type": "String"
-					}
 				},
 				"annotations": []
 			},
