@@ -461,11 +461,11 @@
 					],
 					"scriptLines": [
 						"parameters{",
-						"     TransactionFile as string ('Electro_Transaction_05_16_2023.csv'),",
-						"     ItemFile as string ('Electro_ITEM_MASTER_05_16_2023.csv'),",
-						"     CustomerFile as string ('Electro_CUSTOMER_MASTER_05_16_2023.csv'),",
-						"     StockingFile as string ('Electro_STOCKING_ITEMS_05_16_2023.csv'),",
-						"     InventoryFile as string ('Electro_INVENTORY_05_16_2023.csv')",
+						"     transfile as string ('Electro_Transaction_05_16_2023.csv'),",
+						"     itemfile as string ('Electro_ITEM_MASTER_05_16_2023.csv'),",
+						"     customerfile as string ('Electro_CUSTOMER_MASTER_05_16_2023.csv'),",
+						"     stockingfile as string ('Electro_STOCKING_ITEMS_05_16_2023.csv'),",
+						"     invfile as string ('Electro_INVENTORY_05_16_2023.csv')",
 						"}",
 						"source(allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -519,12 +519,12 @@
 						"     validateSchema: false,",
 						"     format: 'delimited',",
 						"     container: 'datafactoryfiles',",
-						"     folderPath: 'Transfer',",
+						"     folderPath: 'sftpfiles',",
 						"     columnDelimiter: '|',",
 						"     escapeChar: '\\\\',",
 						"     quoteChar: '\\\"',",
 						"     columnNamesAsHeader: true,",
-						"     partitionFileNames:['$TransactionFile'],",
+						"     partitionFileNames:[($transfile)],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     quoteAll: true,",
@@ -534,12 +534,12 @@
 						"     validateSchema: false,",
 						"     format: 'delimited',",
 						"     container: 'datafactoryfiles',",
-						"     folderPath: 'Transfer',",
+						"     folderPath: 'sftpfiles',",
 						"     columnDelimiter: '|',",
 						"     escapeChar: '\\\\',",
 						"     quoteChar: '\\\"',",
 						"     columnNamesAsHeader: true,",
-						"     partitionFileNames:[($ItemFile)],",
+						"     partitionFileNames:[($itemfile)],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     quoteAll: true,",
@@ -549,12 +549,12 @@
 						"     validateSchema: false,",
 						"     format: 'delimited',",
 						"     container: 'datafactoryfiles',",
-						"     folderPath: 'Transfer',",
+						"     folderPath: 'sftpfiles',",
 						"     columnDelimiter: '|',",
 						"     escapeChar: '\\\\',",
 						"     quoteChar: '\\\"',",
 						"     columnNamesAsHeader: true,",
-						"     partitionFileNames:['$CustomerFile'],",
+						"     partitionFileNames:[($customerfile)],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     quoteAll: true,",
@@ -564,13 +564,13 @@
 						"     validateSchema: false,",
 						"     format: 'delimited',",
 						"     container: 'datafactoryfiles',",
-						"     folderPath: 'Transfer',",
+						"     folderPath: 'sftpfiles',",
 						"     truncate: true,",
 						"     columnDelimiter: '|',",
 						"     escapeChar: '\\\\',",
 						"     quoteChar: '\\\"',",
 						"     columnNamesAsHeader: true,",
-						"     partitionFileNames:['$StockingFile'],",
+						"     partitionFileNames:[($stockingfile)],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     saveOrder: 4,",
@@ -579,12 +579,12 @@
 						"     validateSchema: false,",
 						"     format: 'delimited',",
 						"     container: 'datafactoryfiles',",
-						"     folderPath: 'Transfer',",
+						"     folderPath: 'sftpfiles',",
 						"     columnDelimiter: '|',",
 						"     escapeChar: '\\\\',",
 						"     quoteChar: '\\\"',",
 						"     columnNamesAsHeader: true,",
-						"     partitionFileNames:['$InventoryFile'],",
+						"     partitionFileNames:[($invfile)],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     quoteAll: true,",
@@ -857,23 +857,23 @@
 								"referenceName": "Every Sunday SFTP",
 								"type": "DataFlowReference",
 								"parameters": {
-									"TransactionFile": {
+									"transfile": {
 										"value": "'@{variables('Transact File Name')}'",
 										"type": "Expression"
 									},
-									"ItemFile": {
+									"itemfile": {
 										"value": "'@{variables('Item File Name')}'",
 										"type": "Expression"
 									},
-									"CustomerFile": {
+									"customerfile": {
 										"value": "'@{variables('Customer File Name')}'",
 										"type": "Expression"
 									},
-									"StockingFile": {
+									"stockingfile": {
 										"value": "'@{variables('Stocking File Name')}'",
 										"type": "Expression"
 									},
-									"InventoryFile": {
+									"invfile": {
 										"value": "'@{variables('Inventory File Name')}'",
 										"type": "Expression"
 									}
@@ -958,7 +958,7 @@
 						"typeProperties": {
 							"variableName": "Inventory File Name",
 							"value": {
-								"value": "@concat('Electro_INVENTORY_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+								"value": "@concat('Electro_Inventory_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 								"type": "Expression"
 							}
 						}
@@ -978,7 +978,7 @@
 						"typeProperties": {
 							"variableName": "Stocking File Name",
 							"value": {
-								"value": "@concat('Electro_STOCKING_ITEMS_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+								"value": "@concat('Electro_Stocking_Items_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 								"type": "Expression"
 							}
 						}
@@ -998,7 +998,7 @@
 						"typeProperties": {
 							"variableName": "Customer File Name",
 							"value": {
-								"value": "@concat('Electro_CUSTOMER_MASTER_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+								"value": "@concat('Electro_Customer_Master_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 								"type": "Expression"
 							}
 						}
@@ -1018,7 +1018,7 @@
 						"typeProperties": {
 							"variableName": "Item File Name",
 							"value": {
-								"value": "@concat('Electro_ITEM_MASTER_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+								"value": "@concat('Electro_Item_Master_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 								"type": "Expression"
 							}
 						}
@@ -1150,9 +1150,6 @@
 				},
 				"variables": {
 					"Transact File Name": {
-						"type": "String"
-					},
-					"Set Email Value": {
 						"type": "String"
 					},
 					"Item File Name": {
