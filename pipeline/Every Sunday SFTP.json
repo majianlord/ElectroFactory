@@ -26,10 +26,6 @@
 						"referenceName": "Every Sunday SFTP",
 						"type": "DataFlowReference",
 						"parameters": {
-							"FileNAme": {
-								"value": "'@{variables('Transact File Name')}'",
-								"type": "Expression"
-							},
 							"TransactionFile": {
 								"value": "'@{variables('Transact File Name')}'",
 								"type": "Expression"
