@@ -112,7 +112,7 @@
 				"typeProperties": {
 					"variableName": "Inventory File Name",
 					"value": {
-						"value": "@concat('Electro_INVENTORY_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+						"value": "@concat('Electro_Inventory_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 						"type": "Expression"
 					}
 				}
@@ -132,7 +132,7 @@
 				"typeProperties": {
 					"variableName": "Stocking File Name",
 					"value": {
-						"value": "@concat('Electro_STOCKING_ITEMS_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+						"value": "@concat('Electro_Stocking_Items_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 						"type": "Expression"
 					}
 				}
@@ -152,7 +152,7 @@
 				"typeProperties": {
 					"variableName": "Customer File Name",
 					"value": {
-						"value": "@concat('Electro_CUSTOMER_MASTER_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+						"value": "@concat('Electro_Customer_Master_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 						"type": "Expression"
 					}
 				}
@@ -172,7 +172,7 @@
 				"typeProperties": {
 					"variableName": "Item File Name",
 					"value": {
-						"value": "@concat('Electro_ITEM_MASTER_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+						"value": "@concat('Electro_Item_Master_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
 						"type": "Expression"
 					}
 				}
@@ -296,9 +296,6 @@
 		],
 		"variables": {
 			"Transact File Name": {
-				"type": "String"
-			},
-			"Set Email Value": {
 				"type": "String"
 			},
 			"Item File Name": {
