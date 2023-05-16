@@ -26,23 +26,23 @@
 						"referenceName": "Every Sunday SFTP",
 						"type": "DataFlowReference",
 						"parameters": {
-							"TransactionFile": {
+							"transfile": {
 								"value": "'@{variables('Transact File Name')}'",
 								"type": "Expression"
 							},
-							"ItemFile": {
+							"itemfile": {
 								"value": "'@{variables('Item File Name')}'",
 								"type": "Expression"
 							},
-							"CustomerFile": {
+							"customerfile": {
 								"value": "'@{variables('Customer File Name')}'",
 								"type": "Expression"
 							},
-							"StockingFile": {
+							"stockingfile": {
 								"value": "'@{variables('Stocking File Name')}'",
 								"type": "Expression"
 							},
-							"InventoryFile": {
+							"invfile": {
 								"value": "'@{variables('Inventory File Name')}'",
 								"type": "Expression"
 							}

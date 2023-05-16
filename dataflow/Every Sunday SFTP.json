@@ -157,7 +157,7 @@
 				"     validateSchema: false,",
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
-				"     folderPath: 'Transfer',",
+				"     folderPath: 'sftpfiles',",
 				"     columnDelimiter: '|',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
