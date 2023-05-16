@@ -147,11 +147,10 @@
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true,",
-				"     partitionFileNames:[''],",
+				"     partitionFileNames:['$TransactionFile'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     quoteAll: true,",
-				"     header: ($TransactionFile),",
 				"     saveOrder: 1,",
 				"     partitionBy('hash', 1)) ~> TransferFile",
 				"OrderByItemNO sink(allowSchemaDrift: true,",
@@ -167,7 +166,8 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     quoteAll: true,",
-				"     saveOrder: 2) ~> ItemFileOut",
+				"     saveOrder: 2,",
+				"     partitionBy('hash', 1)) ~> ItemFileOut",
 				"CustomerFile sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'delimited',",
@@ -181,7 +181,8 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     quoteAll: true,",
-				"     saveOrder: 3) ~> CustomerFileOut",
+				"     saveOrder: 3,",
+				"     partitionBy('hash', 1)) ~> CustomerFileOut",
 				"StockingFile sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'delimited',",
@@ -195,7 +196,8 @@
 				"     partitionFileNames:['$StockingFile'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     saveOrder: 4) ~> StockingFileOut",
+				"     saveOrder: 4,",
+				"     partitionBy('hash', 1)) ~> StockingFileOut",
 				"InventoryFile sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'delimited',",
@@ -209,7 +211,8 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     quoteAll: true,",
-				"     saveOrder: 5) ~> InventoryFileOut"
+				"     saveOrder: 5,",
+				"     partitionBy('hash', 1)) ~> InventoryFileOut"
 			]
 		}
 	}
