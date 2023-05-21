@@ -500,7 +500,7 @@
 						"     validateSchema: false,",
 						"     format: 'query',",
 						"     store: 'sqlserver',",
-						"     query: '/*Rev 1.  Might want country name added too instead of just code.  5-2-23\\n*/\\nselect c.cust_no \\'Cust No\\', c.cust_name \\'Cust_Name\\', c.cust_addr1 \\'Address 1\\', c.cust_addr2 \\'Address 2\\', c.cust_addr3 \\'Address 3\\', c.cust_addr4 \\'Address 4\\',\\n        c.cust_city \\'Cust City\\', c.cust_state \\'Cust State\\', c.cust_zip \\'Cust Zip\\', c.cust_cntry \\'Country\\', c.slsman_1 \\'Salesmen 1\\', s1.slsman_nam \\'Salesmen 1 Name\\', \\n          c.slsman_2 \\'Salesmen 2\\', s2.slsman_nam \\'Salesmen 2 Name\\', c.cust_type \\'Cust Type Code\\', \\n          case when c.cust_type like \\'A%\\' then \\'Subcontractor\\'\\n                                                            when c.cust_type like \\'B%\\' then \\'OEM\\'\\n                                                            when (c.cust_type like \\'C%\\' or c.cust_Type like \\'D%\\') then \\'Aftermarket\\'\\n                                                            when c.cust_type like \\'E%\\' then \\'Government\\'\\n                                                            when c.cust_type like \\'F%\\' then \\'Franchised Distributor\\'\\n                                                            when c.cust_type like \\'G%\\' then \\'Broker/Disty Not Franchised\\'\\n                                                                           when c.cust_type like \\'I%\\' then \\'Intercompany\\'\\n                                                               else \\'Other\\' \\n                                                               end as \\'Customer Type Description\\', C.active \\'Active\\' \\nfrom customer c\\njoin slsman s1 on s1.slsman_no = c.slsman_1\\njoin slsman s2 on s2.slsman_no = c.slsman_2',",
+						"     query: '/*Rev 1.  Might want country name added too instead of just code.  5-2-23\\n*/\\nselect c.cust_no \\'Cust No\\', c.cust_name \\'Cust_Name\\', c.cust_addr1 \\'Address 1\\', c.cust_addr2 \\'Address 2\\', c.cust_addr3 \\'Address 3\\', c.cust_addr4 \\'Address 4\\',\\n        c.cust_city \\'Cust City\\', c.cust_state \\'Cust State\\', c.cust_zip \\'Cust Zip\\', c.cust_cntry \\'Country\\', c.slsman_1 \\'Salesmen 1\\', s1.slsman_nam \\'Salesmen 1 Name\\', \\n          c.slsman_2 \\'Salesmen 2\\', s2.slsman_nam \\'Salesmen 2 Name\\', c.cust_type \\'Cust Type Code\\', \\n          case when c.cust_type like \\'A%\\' then \\'Subcontractor\\'\\n                                                            when c.cust_type like \\'B%\\' then \\'OEM\\'\\n                                                            when (c.cust_type like \\'C%\\' or c.cust_Type like \\'D%\\') then \\'Aftermarket\\'\\n                                                            when c.cust_type like \\'E%\\' then \\'Government\\'\\n                                                            when c.cust_type like \\'F%\\' then \\'Franchised Distributor\\'\\n                                                            when c.cust_type like \\'G%\\' then \\'Broker/Disty Not Franchised\\'\\n                                                                           when c.cust_type like \\'I%\\' then \\'Intercompany\\'\\n                                                               else \\'Other\\' \\n                                                               end as \\'Customer Type Description\\', C.active \\'Active\\' \\nfrom customer c\\njoin slsman s1 on s1.slsman_no = c.slsman_1\\nleft join slsman s2 on s2.slsman_no = c.slsman_2',",
 						"     isolationLevel: 'READ_UNCOMMITTED') ~> CustomerFile",
 						"source(allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -1978,42 +1978,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Weekly Reports saterday')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Run the weekly reports and email them",
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "Weekly Reports",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Week",
-						"interval": 1,
-						"startTime": "2023-04-20T14:28:00",
-						"timeZone": "Eastern Standard Time",
-						"schedule": {
-							"weekDays": [
-								"Saturday"
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/Weekly Reports')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/Sunday Afternoon Trigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -2053,6 +2017,42 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/Every Sunday SFTP')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Weekly Reports saterday')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Run the weekly reports and email them",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Weekly Reports",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2023-04-20T14:28:00",
+						"timeZone": "Eastern Standard Time",
+						"schedule": {
+							"weekDays": [
+								"Saturday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Weekly Reports')]"
 			]
 		},
 		{
