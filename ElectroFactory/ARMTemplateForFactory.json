@@ -846,9 +846,9 @@
 							"headers": {},
 							"body": {
 								"FileName": "To-Stock-Inventory.csv",
-								"EMailTo": "Ty.Diedrick@electroenterprises.com",
-								"EmailSubject": "Report Testing V324",
-								"PipeLineName": "ECIA_To_Text",
+								"EMailTo": "Ty.Diedrick@electroenterprises.com;Mitch.Enright@electroenterprises.com",
+								"EmailSubject": "To Stock Inventory",
+								"PipeLineName": "To_Stock_Inventory_Report_15th",
 								"FilePath": "/datafactoryfiles/TyReport1/to-stock-inventory.csv"
 							}
 						}
