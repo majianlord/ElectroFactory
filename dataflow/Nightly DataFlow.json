@@ -18,7 +18,7 @@
 						"referenceName": "Temp_Files_Locations",
 						"type": "LinkedServiceReference"
 					},
-					"name": "AROpen",
+					"name": "ChangesToPriorPeriods",
 					"description": "AR Open Report"
 				}
 			],
@@ -34,15 +34,15 @@
 				"     validateSchema: false,",
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
-				"     folderPath: 'ARopen',",
+				"     folderPath: 'ChangesToPriorPeriods',",
 				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true,",
-				"     partitionFileNames:['ARopen.csv'],",
+				"     partitionFileNames:['ChangesToPriorPeriods.csv'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> AROpen"
+				"     partitionBy('hash', 1)) ~> ChangesToPriorPeriods"
 			]
 		}
 	}
