@@ -3,12 +3,12 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Send Email Logic APP",
+				"name": "ChangesToPriorPeriods Email",
 				"description": "Send an email thought Azure Logic App",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "To Stock Inventory Run",
+						"activity": "Run Nightly Data Flow",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -35,7 +35,7 @@
 				}
 			},
 			{
-				"name": "To Stock Inventory Run",
+				"name": "Run Nightly Data Flow",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -48,7 +48,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "To_Stock_Inventory_Report_DF",
+						"referenceName": "Nightly DataFlow",
 						"type": "DataFlowReference"
 					},
 					"compute": {
