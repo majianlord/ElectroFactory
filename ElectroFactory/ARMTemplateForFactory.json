@@ -577,6 +577,12 @@
 						"name": "Transact File Name",
 						"type": "SetVariable",
 						"dependsOn": [],
+						"policy": {
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "Transact File Name",
@@ -597,6 +603,12 @@
 								]
 							}
 						],
+						"policy": {
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "Inventory File Name",
@@ -617,6 +629,12 @@
 								]
 							}
 						],
+						"policy": {
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "Stocking File Name",
@@ -637,6 +655,12 @@
 								]
 							}
 						],
+						"policy": {
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "Customer File Name",
@@ -657,6 +681,12 @@
 								]
 							}
 						],
+						"policy": {
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "Item File Name",
@@ -3187,6 +3217,179 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]",
 				"[concat(variables('factoryId'), '/linkedServices/Temp_Files_Locations')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Nightly Reports')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ChangesToPriorPeriods Email",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Run Nightly Data Flow",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"FileName": "ChangesToPriorPeriods.csv",
+								"EMailTo": "Ty.Diedrick@electroenterprises.com;allen.hill@fdhaero.com",
+								"EmailSubject": "Changes to Prior Periods",
+								"PipeLineName": "Changes to Prior Periods",
+								"FilePath": "/datafactoryfiles/ChangesToPriorPeriods/ChangesToPriorPeriods.csv"
+							}
+						}
+					},
+					{
+						"name": "Run Nightly Data Flow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Nightly DataFlow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"EPDS01AROpen": {},
+									"ChangesToPriorPeriods": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Nightly DataFlow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Nightly DataFlow')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "TRO_Connect_epds01",
+								"type": "LinkedServiceReference"
+							},
+							"name": "EPDS01AROpen"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							},
+							"name": "ChangesToPriorPeriods",
+							"description": "AR Open Report"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'query',",
+						"     store: 'sqlserver',",
+						"     query: 'select c.prg_id, t.acct_desc, x.*\\nfrom gltrx x \\njoin reg_ctlf c on c.reg_int_id = x.reg_int_id\\njoin chart t on t.acct_no = x.acct_no\\nwhere x.updt_dt > (getdate() - 31) and x.trx_date <>  (CONVERT(DATE, x.updt_dt))\\n',",
+						"     isolationLevel: 'READ_UNCOMMITTED') ~> EPDS01AROpen",
+						"EPDS01AROpen sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'datafactoryfiles',",
+						"     folderPath: 'ChangesToPriorPeriods',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['ChangesToPriorPeriods.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> ChangesToPriorPeriods"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/TRO_Connect_epds01')]",
+				"[concat(variables('factoryId'), '/linkedServices/Temp_Files_Locations')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Every Night 10pm')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Nightly Reports",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 15,
+						"startTime": "2023-06-26T21:15:00Z",
+						"timeZone": "UTC",
+						"schedule": {
+							"minutes": [
+								15
+							],
+							"hours": [
+								22
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Nightly Reports')]"
 			]
 		}
 	]
