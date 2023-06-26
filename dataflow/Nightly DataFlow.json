@@ -1,0 +1,49 @@
+{
+	"name": "Nightly DataFlow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "TRO_Connect_epds01",
+						"type": "LinkedServiceReference"
+					},
+					"name": "EPDS01AROpen"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "Temp_Files_Locations",
+						"type": "LinkedServiceReference"
+					},
+					"name": "AROpen",
+					"description": "AR Open Report"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'query',",
+				"     store: 'sqlserver',",
+				"     query: 'select c.prg_id, t.acct_desc, x.*\\nfrom gltrx x \\njoin reg_ctlf c on c.reg_int_id = x.reg_int_id\\njoin chart t on t.acct_no = x.acct_no\\nwhere x.updt_dt > (getdate() - 31) and x.trx_date <>  (CONVERT(DATE, x.updt_dt))\\n',",
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> EPDS01AROpen",
+				"EPDS01AROpen sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     container: 'datafactoryfiles',",
+				"     folderPath: 'ARopen',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['ARopen.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> AROpen"
+			]
+		}
+	}
+}
