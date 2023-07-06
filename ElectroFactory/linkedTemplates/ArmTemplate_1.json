@@ -627,7 +627,7 @@
 						"     validateSchema: false,",
 						"     format: 'query',",
 						"     store: 'sqlserver',",
-						"     query: 'select c.prg_id, t.acct_desc, x.*\\nfrom gltrx x \\njoin reg_ctlf c on c.reg_int_id = x.reg_int_id\\njoin chart t on t.acct_no = x.acct_no\\nwhere x.updt_dt > (getdate() - 31) and x.trx_date <>  (CONVERT(DATE, x.updt_dt))\\n',",
+						"     query: 'select c.prg_id, t.acct_desc, x.*\\nfrom gltrx x \\njoin reg_ctlf c on c.reg_int_id = x.reg_int_id\\njoin chart t on cast(t.acct_no as int) = cast(x.acct_no as int)\\nwhere x.updt_dt > (getdate() - 31) and x.trx_date <>  (CONVERT(DATE, x.updt_dt))\\n',",
 						"     isolationLevel: 'READ_UNCOMMITTED') ~> EPDS01AROpen",
 						"EPDS01AROpen sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
