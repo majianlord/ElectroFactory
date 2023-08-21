@@ -340,6 +340,35 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Inventory SFTP_copy1",
+				"description": "Send an email thought Azure Logic App",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Inventory SFTP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
+					"method": "POST",
+					"body": {
+						"value": "@concat('{\"FileName\":\"', variables('Status File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/sftpfiles/',variables('Status File Name'),'\"}')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
