@@ -271,7 +271,7 @@
 				"     validateSchema: false,",
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
-				"     folderPath: 'TyReport1',",
+				"     folderPath: 'TyReport2',",
 				"     columnDelimiter: '|',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
