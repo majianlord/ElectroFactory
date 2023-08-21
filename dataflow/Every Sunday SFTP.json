@@ -45,6 +45,13 @@
 						"type": "LinkedServiceReference"
 					},
 					"name": "EndFIle"
+				},
+				{
+					"linkedService": {
+						"referenceName": "TRO_Connect_epds01",
+						"type": "LinkedServiceReference"
+					},
+					"name": "ProcurementInfoEmail"
 				}
 			],
 			"sinks": [
@@ -158,6 +165,12 @@
 				"     store: 'sqlserver',",
 				"     query: 'select \\'end of inbound\\' as Status',",
 				"     isolationLevel: 'READ_UNCOMMITTED') ~> EndFIle",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'query',",
+				"     store: 'sqlserver',",
+				"     query: 'select h.vend_no, d.*\\nfrom po_Detl d\\njoin po_hedr h on h.po_no = d.po_no\\nwhere (h.vend_no = \\'BJG\\' or h.vend_no = \\'GLEN\\') and d.status <> \\'V\\' and h.status <> \\'V\\' and d.create_dt > getdate() - 7\\n',",
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> ProcurementInfoEmail",
 				"ItemFile sort(asc(SKU, true)) ~> OrderByItemNO",
 				"Transfer sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
