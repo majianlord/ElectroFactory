@@ -38,6 +38,13 @@
 						"type": "LinkedServiceReference"
 					},
 					"name": "InventoryFile"
+				},
+				{
+					"linkedService": {
+						"referenceName": "TRO_Connect_epds01",
+						"type": "LinkedServiceReference"
+					},
+					"name": "EndFIle"
 				}
 			],
 			"sinks": [
@@ -75,6 +82,13 @@
 						"type": "LinkedServiceReference"
 					},
 					"name": "InventoryFileOut"
+				},
+				{
+					"linkedService": {
+						"referenceName": "Temp_Files_Locations",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -88,7 +102,8 @@
 				"     itemfile as string ('Electro_ITEM_MASTER_05_16_2023.csv'),",
 				"     customerfile as string ('Electro_CUSTOMER_MASTER_05_16_2023.csv'),",
 				"     stockingfile as string ('Electro_STOCKING_ITEMS_05_16_2023.csv'),",
-				"     invfile as string ('Electro_INVENTORY_05_16_2023.csv')",
+				"     invfile as string ('Electro_INVENTORY_05_16_2023.csv'),",
+				"     status as string ('ELECTRO_05_16_2023_status.csv')",
 				"}",
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -137,6 +152,12 @@
 				"     store: 'sqlserver',",
 				"     query: 'select dbo.fnget_lot_cost(v.lot_no) \\'Lot Cost\\', v.lot_no \\'Lot No\\', v.item_no \\'SKU\\', v.manu_no \\'Manu\\', v.whse_cd \\'Warehouse\\', v.orig_qty \\'Original Quantity\\', \\n          v.bal_of_lot \\'Balance of Lot\\', v.dm_qty \\'DM Quantity\\', v.qty_commit \\'Quantity Committed\\'\\nfrom lot_hedr v\\nwhere (v.bal_of_lot > 0 or v.dm_qty > 0)',",
 				"     isolationLevel: 'READ_UNCOMMITTED') ~> InventoryFile",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'query',",
+				"     store: 'sqlserver',",
+				"     query: 'select \\'end of inbound\\' as Status',",
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> EndFIle",
 				"ItemFile sort(asc(SKU, true)) ~> OrderByItemNO",
 				"Transfer sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -212,7 +233,20 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     quoteAll: true,",
 				"     saveOrder: 5,",
-				"     partitionBy('hash', 1)) ~> InventoryFileOut"
+				"     partitionBy('hash', 1)) ~> InventoryFileOut",
+				"EndFIle sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     container: 'datafactoryfiles',",
+				"     folderPath: 'sftpfiles',",
+				"     columnDelimiter: '|',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:[($status)],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     quoteAll: true) ~> sink1"
 			]
 		}
 	}
