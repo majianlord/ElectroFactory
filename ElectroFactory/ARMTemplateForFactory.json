@@ -520,6 +520,10 @@
 									"invfile": {
 										"value": "'@{variables('Inventory File Name')}'",
 										"type": "Expression"
+									},
+									"status": {
+										"value": "'@{variables('Status File Name')}'",
+										"type": "Expression"
 									}
 								},
 								"datasetParameters": {
@@ -528,11 +532,13 @@
 									"CustomerFile": {},
 									"StockingFile": {},
 									"InventoryFile": {},
+									"EndFIle": {},
 									"TransferFile": {},
 									"ItemFileOut": {},
 									"CustomerFileOut": {},
 									"StockingFileOut": {},
-									"InventoryFileOut": {}
+									"InventoryFileOut": {},
+									"sink1": {}
 								}
 							},
 							"staging": {},
@@ -576,10 +582,15 @@
 					{
 						"name": "Transact File Name",
 						"type": "SetVariable",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Set Status File Name",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
 						},
@@ -604,8 +615,6 @@
 							}
 						],
 						"policy": {
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
 						},
@@ -630,8 +639,6 @@
 							}
 						],
 						"policy": {
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
 						},
@@ -656,8 +663,6 @@
 							}
 						],
 						"policy": {
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
 						},
@@ -682,8 +687,6 @@
 							}
 						],
 						"policy": {
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
 						},
@@ -815,6 +818,53 @@
 								"type": "Expression"
 							}
 						}
+					},
+					{
+						"name": "Set Status File Name",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Status File Name",
+							"value": {
+								"value": "@concat('Electro_',formatDateTime(utcNow(),'MM_dd_yyyy'),'_status.csv')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Inventory SFTP_copy1",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Inventory SFTP",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "@concat('{\"FileName\":\"', variables('Status File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/sftpfiles/',variables('Status File Name'),'\"}')",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"policy": {
@@ -835,6 +885,9 @@
 						"type": "String"
 					},
 					"Inventory File Name": {
+						"type": "String"
+					},
+					"Status File Name": {
 						"type": "String"
 					}
 				},
@@ -2916,6 +2969,13 @@
 								"type": "LinkedServiceReference"
 							},
 							"name": "InventoryFile"
+						},
+						{
+							"linkedService": {
+								"referenceName": "TRO_Connect_epds01",
+								"type": "LinkedServiceReference"
+							},
+							"name": "EndFIle"
 						}
 					],
 					"sinks": [
@@ -2953,6 +3013,13 @@
 								"type": "LinkedServiceReference"
 							},
 							"name": "InventoryFileOut"
+						},
+						{
+							"linkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1"
 						}
 					],
 					"transformations": [
@@ -2966,7 +3033,8 @@
 						"     itemfile as string ('Electro_ITEM_MASTER_05_16_2023.csv'),",
 						"     customerfile as string ('Electro_CUSTOMER_MASTER_05_16_2023.csv'),",
 						"     stockingfile as string ('Electro_STOCKING_ITEMS_05_16_2023.csv'),",
-						"     invfile as string ('Electro_INVENTORY_05_16_2023.csv')",
+						"     invfile as string ('Electro_INVENTORY_05_16_2023.csv'),",
+						"     status as string ('ELECTRO_05_16_2023_status.csv')",
 						"}",
 						"source(allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -3015,6 +3083,12 @@
 						"     store: 'sqlserver',",
 						"     query: 'select dbo.fnget_lot_cost(v.lot_no) \\'Lot Cost\\', v.lot_no \\'Lot No\\', v.item_no \\'SKU\\', v.manu_no \\'Manu\\', v.whse_cd \\'Warehouse\\', v.orig_qty \\'Original Quantity\\', \\n          v.bal_of_lot \\'Balance of Lot\\', v.dm_qty \\'DM Quantity\\', v.qty_commit \\'Quantity Committed\\'\\nfrom lot_hedr v\\nwhere (v.bal_of_lot > 0 or v.dm_qty > 0)',",
 						"     isolationLevel: 'READ_UNCOMMITTED') ~> InventoryFile",
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'query',",
+						"     store: 'sqlserver',",
+						"     query: 'select \\'end of inbound\\' as Status',",
+						"     isolationLevel: 'READ_UNCOMMITTED') ~> EndFIle",
 						"ItemFile sort(asc(SKU, true)) ~> OrderByItemNO",
 						"Transfer sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -3090,7 +3164,20 @@
 						"     skipDuplicateMapOutputs: true,",
 						"     quoteAll: true,",
 						"     saveOrder: 5,",
-						"     partitionBy('hash', 1)) ~> InventoryFileOut"
+						"     partitionBy('hash', 1)) ~> InventoryFileOut",
+						"EndFIle sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'datafactoryfiles',",
+						"     folderPath: 'sftpfiles',",
+						"     columnDelimiter: '|',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:[($status)],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     quoteAll: true) ~> sink1"
 					]
 				}
 			},
@@ -3208,7 +3295,7 @@
 						"     limit: 100,",
 						"     format: 'query',",
 						"     store: 'sqlserver',",
-						"     query: 'select  po_hedr.vend_no, po_detl.po_no, po_Detl.lin_no, po_Detl.item_no, po_Detl.manu_no, po_detl.promise_dt, po_Detl.ship_asap, po_detl.unit_cost,  po_Detl.bal_of_ord, x.allocated as  \\'allocated\\', (po_detl.bal_of_ord - x.allocated) \\'to_stock\\', ((po_detl.bal_of_ord - x.allocated) * po_detl.unit_cost) \\'value_to_stock\\'\\nfrom po_detl\\njoin po_hedr on po_hedr.po_no = po_Detl.po_no and po_hedr.vend_no not like \\'%SHOP%\\'\\nleft join (select d.po_no, d.lin_no, sum(c.qty_allc) as \\'allocated\\'\\n                     from po_allc c\\n                     join po_Detl d on d.po_no = c.po_no and d.lin_no = c.lin_no\\n                     join po_hedr h on h.po_no = d.po_no\\n                     where d.status <> \\'V\\' and d.status <> \\'C\\' and h.status <> \\'C\\' and h.status <> \\'V\\' and d.bal_of_ord > \\'0\\'\\n                     group by d.po_no, d.lin_no) x on x.po_no = po_Detl.po_no and x.lin_no = po_detl.lin_no\\nwhere (x.allocated <> po_Detl.bal_of_ord) and bal_of_ord > 0 and po_hedr.vend_no <> \\'%SHOP%\\' and po_Detl.status <> \\'V\\' and po_Detl.status <> \\'C\\' \\ngroup by  po_hedr.vend_no, po_detl.po_no, po_Detl.lin_no, po_Detl.item_no, po_Detl.manu_no, po_detl.promise_dt, po_Detl.ship_asap, po_detl.unit_cost, po_Detl.bal_of_ord, x.allocated\\n\\n',",
+						"     query: 'select  po_hedr.vend_no, po_detl.po_no, po_Detl.lin_no, po_Detl.item_no, po_Detl.manu_no, po_detl.promise_dt, po_Detl.ship_asap, po_detl.unit_cost,  po_Detl.bal_of_ord, x.allocated as  \\'allocated\\', (po_detl.bal_of_ord - x.allocated) \\'to_stock\\', ((po_detl.bal_of_ord - x.allocated) * po_detl.unit_cost) \\'value_to_stock\\'\\nfrom po_detl\\njoin po_hedr on po_hedr.po_no = po_Detl.po_no and po_hedr.vend_no not like \\'%SHOP%\\'\\nleft join (select d.po_no, d.lin_no, sum(c.qty_allc) as \\'allocated\\'\\n                     from po_allc c\\n                     join po_Detl d on d.po_no = c.po_no and d.lin_no = c.lin_no\\n                     join po_hedr h on h.po_no = d.po_no\\n                     where d.status <> \\'V\\' and d.status <> \\'C\\' and h.status <> \\'C\\' and h.status <> \\'V\\' and d.bal_of_ord > \\'0\\'\\n                     group by d.po_no, d.lin_no) x on x.po_no = po_Detl.po_no and x.lin_no = po_detl.lin_no\\nwhere (x.allocated <> po_Detl.bal_of_ord) and bal_of_ord > 0 and po_hedr.vend_no <> \\'%SHOP%\\' and po_Detl.status <> \\'V\\' and po_Detl.status <> \\'C\\' \\ngroup by  po_hedr.vend_no, po_detl.po_no, po_Detl.lin_no, po_Detl.item_no, po_Detl.manu_no, po_detl.promise_dt, po_Detl.ship_asap, po_detl.unit_cost, po_Detl.bal_of_ord, x.allocated\\norder by ((po_detl.bal_of_ord - x.allocated) * po_detl.unit_cost) desc\\n',",
 						"     isolationLevel: 'READ_COMMITTED') ~> Source1",
 						"Source1 sort(desc(value_to_stock, true)) ~> sort1",
 						"sort1 sink(allowSchemaDrift: true,",
