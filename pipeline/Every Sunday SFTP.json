@@ -45,6 +45,10 @@
 							"invfile": {
 								"value": "'@{variables('Inventory File Name')}'",
 								"type": "Expression"
+							},
+							"status": {
+								"value": "'@{variables('Status File Name')}'",
+								"type": "Expression"
 							}
 						}
 					},
@@ -87,7 +91,18 @@
 			{
 				"name": "Transact File Name",
 				"type": "SetVariable",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set Status File Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "Transact File Name",
@@ -108,6 +123,10 @@
 						]
 					}
 				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "Inventory File Name",
@@ -128,6 +147,10 @@
 						]
 					}
 				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "Stocking File Name",
@@ -148,6 +171,10 @@
 						]
 					}
 				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "Customer File Name",
@@ -168,6 +195,10 @@
 						]
 					}
 				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "Item File Name",
@@ -292,6 +323,23 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Set Status File Name",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Status File Name",
+					"value": {
+						"value": "@concat('Electro_',formatDateTime(utcNow(),'MM_dd_yyyy'),'_status.csv')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
@@ -308,6 +356,9 @@
 				"type": "String"
 			},
 			"Inventory File Name": {
+				"type": "String"
+			},
+			"Status File Name": {
 				"type": "String"
 			}
 		},
