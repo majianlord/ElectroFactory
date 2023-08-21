@@ -279,7 +279,8 @@
 				"     partitionFileNames:['Procurement.csv'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     quoteAll: true) ~> sink2"
+				"     quoteAll: true,",
+				"     partitionBy('hash', 1)) ~> sink2"
 			]
 		}
 	}
