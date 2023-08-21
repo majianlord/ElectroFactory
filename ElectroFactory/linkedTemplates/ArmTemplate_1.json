@@ -422,6 +422,13 @@
 								"type": "LinkedServiceReference"
 							},
 							"name": "EndFIle"
+						},
+						{
+							"linkedService": {
+								"referenceName": "TRO_Connect_epds01",
+								"type": "LinkedServiceReference"
+							},
+							"name": "ProcurementInfoEmail"
 						}
 					],
 					"sinks": [
@@ -466,6 +473,13 @@
 								"type": "LinkedServiceReference"
 							},
 							"name": "sink1"
+						},
+						{
+							"linkedService": {
+								"referenceName": "Temp_Files_Locations",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink2"
 						}
 					],
 					"transformations": [
@@ -535,6 +549,12 @@
 						"     store: 'sqlserver',",
 						"     query: 'select \\'end of inbound\\' as Status',",
 						"     isolationLevel: 'READ_UNCOMMITTED') ~> EndFIle",
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'query',",
+						"     store: 'sqlserver',",
+						"     query: 'select h.vend_no, d.*\\nfrom po_Detl d\\njoin po_hedr h on h.po_no = d.po_no\\nwhere (h.vend_no = \\'BJG\\' or h.vend_no = \\'GLEN\\') and d.status <> \\'V\\' and h.status <> \\'V\\' and d.create_dt > getdate() - 7\\n',",
+						"     isolationLevel: 'READ_UNCOMMITTED') ~> ProcurementInfoEmail",
 						"ItemFile sort(asc(SKU, true)) ~> OrderByItemNO",
 						"Transfer sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -623,7 +643,22 @@
 						"     partitionFileNames:[($status)],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     quoteAll: true) ~> sink1"
+						"     quoteAll: true,",
+						"     partitionBy('hash', 1)) ~> sink1",
+						"ProcurementInfoEmail sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'datafactoryfiles',",
+						"     folderPath: 'TyReport2',",
+						"     columnDelimiter: '|',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['Procurement.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     quoteAll: true,",
+						"     partitionBy('hash', 1)) ~> sink2"
 					]
 				}
 			},
@@ -975,12 +1010,14 @@
 									"StockingFile": {},
 									"InventoryFile": {},
 									"EndFIle": {},
+									"ProcurementInfoEmail": {},
 									"TransferFile": {},
 									"ItemFileOut": {},
 									"CustomerFileOut": {},
 									"StockingFileOut": {},
 									"InventoryFileOut": {},
-									"sink1": {}
+									"sink1": {},
+									"sink2": {}
 								}
 							},
 							"staging": {},
@@ -1305,6 +1342,39 @@
 							"body": {
 								"value": "@concat('{\"FileName\":\"', variables('Status File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/sftpfiles/',variables('Status File Name'),'\"}')",
 								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Weeklyu Procurement Report Email",
+						"description": "Send an email thought Azure Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Inventory SFTP_copy1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"FileName": "Procurement.csv",
+								"EMailTo": "Ty.Diedrick@electroenterprises.com;Becca.Chitlik@crowe.com;Keegan.Lahm@crowe.com;John.Mattar@crowe.com",
+								"EmailSubject": "Electro Procurement Report",
+								"PipeLineName": "Electro Procurement Report",
+								"FilePath": "/datafactoryfiles/TyReport2/Procurement.csv"
 							}
 						}
 					}
