@@ -448,8 +448,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"variables": {
 					"Run EPDS SQL": {
@@ -903,8 +902,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"variables": {
 					"Transact File Name": {
@@ -1003,8 +1001,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
@@ -1083,8 +1080,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
@@ -1235,8 +1231,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"variables": {
 					"Transact File Name": {
@@ -1320,8 +1315,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
@@ -3142,7 +3136,7 @@
 						"     validateSchema: false,",
 						"     format: 'query',",
 						"     store: 'sqlserver',",
-						"     query: 'select h.vend_no, d.po_no, d.lin_no, d.item_no, d.manu_no, d.ord_qty, d.bal_of_ord, d.qty_recvd, d.unit_cost, d.for_unit_cst, d.due_date, d.promise_dt, d.status, d.pd_comm, d.pd_po_com, d.rc_close\\nfrom po_Detl d\\njoin po_hedr h on h.po_no = d.po_no\\nwhere (h.vend_no = \\'BJG\\' or h.vend_no = \\'GLEN\\') and d.status <> \\'V\\' and h.status <> \\'V\\' and d.create_dt > getdate() - 7\\n',",
+						"     query: 'select h.vend_no, d.po_no, d.lin_no, d.item_no, d.manu_no, d.ord_qty, d.bal_of_ord, d.qty_recvd, d.unit_cost, d.for_unit_cst, d.due_date, d.promise_dt, d.status, d.pd_comm, d.rc_close\\nfrom po_Detl d\\njoin po_hedr h on h.po_no = d.po_no\\nwhere (h.vend_no = \\'BJG\\' or h.vend_no = \\'GLEN\\') and d.status <> \\'V\\' and h.status <> \\'V\\' and d.create_dt > getdate() - 7\\n',",
 						"     isolationLevel: 'READ_UNCOMMITTED') ~> ProcurementInfoEmail",
 						"ItemFile sort(asc(SKU, true)) ~> OrderByItemNO",
 						"Transfer sink(allowSchemaDrift: true,",
