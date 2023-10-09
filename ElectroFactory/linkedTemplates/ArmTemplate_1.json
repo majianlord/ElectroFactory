@@ -576,6 +576,8 @@
 						"     format: 'delimited',",
 						"     container: 'datafactoryfiles',",
 						"     folderPath: 'sftpfiles',",
+						"     compressionCodec: 'gzip',",
+						"     compressionLevel: 'Optimal',",
 						"     columnDelimiter: '|',",
 						"     escapeChar: '\\\\',",
 						"     quoteChar: '\\\"',",
@@ -1173,7 +1175,7 @@
 						"typeProperties": {
 							"variableName": "Item File Name",
 							"value": {
-								"value": "@concat('Electro_Item_Master_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+								"value": "@concat('Electro_Item_Master_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv.gz')",
 								"type": "Expression"
 							}
 						}
@@ -2358,7 +2360,7 @@
 								15
 							],
 							"hours": [
-								3
+								17
 							],
 							"weekDays": [
 								"Sunday"
