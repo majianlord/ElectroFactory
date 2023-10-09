@@ -199,6 +199,8 @@
 				"     format: 'delimited',",
 				"     container: 'datafactoryfiles',",
 				"     folderPath: 'sftpfiles',",
+				"     compressionCodec: 'gzip',",
+				"     compressionLevel: 'Optimal',",
 				"     columnDelimiter: '|',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",

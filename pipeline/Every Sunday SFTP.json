@@ -203,7 +203,7 @@
 				"typeProperties": {
 					"variableName": "Item File Name",
 					"value": {
-						"value": "@concat('Electro_Item_Master_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv')",
+						"value": "@concat('Electro_Item_Master_',formatDateTime(utcNow(),'MM_dd_yyyy'),'.csv.gz')",
 						"type": "Expression"
 					}
 				}
