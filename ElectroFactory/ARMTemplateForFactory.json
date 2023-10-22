@@ -871,14 +871,9 @@
 						"name": "Weeklyu Procurement Report Email",
 						"description": "Send an email thought Azure Logic App",
 						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Inventory SFTP_copy1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
+						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
