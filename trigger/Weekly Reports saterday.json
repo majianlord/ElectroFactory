@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Run the weekly reports and email them",
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
