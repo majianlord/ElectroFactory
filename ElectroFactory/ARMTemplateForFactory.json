@@ -434,9 +434,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"body": {
 								"FileName": "ILSEE3.txt",
 								"EMailTo": "alon@stealthaerospace.com;Solyman.Omar@fdhaero.com;Ty.Diedrick@electroenterprises.com;Nathan.Little@electroenterprises.com",
@@ -571,9 +571,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"body": {
 								"value": "@concat('{\"FileName\":\"',variables('Transact File Name'),'\",\"PipeLineName\":\"Electro Transact Report\",\"FilePath\":\"/datafactoryfiles/sftpfiles/',variables('Transact File Name'),'\"}')",
 								"type": "Expression"
@@ -721,9 +721,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"body": {
 								"value": "@concat('{\"FileName\":\"',variables('Item File Name'),'\",\"PipeLineName\":\"Electro Item Report\",\"FilePath\":\"/datafactoryfiles/sftpfiles/',variables('Item File Name'),'\"}')",
 								"type": "Expression"
@@ -751,9 +751,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"body": {
 								"value": "@concat('{\"FileName\":\"',variables('Customer File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/sftpfiles/',variables('Customer File Name'),'\"}')",
 								"type": "Expression"
@@ -781,9 +781,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"body": {
 								"value": "@concat('{\"FileName\":\"',variables('Inventory File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/sftpfiles/',variables('Inventory File Name'),'\"}')",
 								"type": "Expression"
@@ -811,9 +811,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"body": {
 								"value": "@concat('{\"FileName\":\"',variables('Stocking File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/sftpfiles/',variables('Stocking File Name'),'\"}')",
 								"type": "Expression"
@@ -858,9 +858,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-15.southcentralus.logic.azure.com:443/workflows/b88a4112ab134dc38be93e65dfccefe1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B762GsLRa2-Wnwb61vkJWtb20VykKWn7CoXyWV_5XVY",
 							"body": {
 								"value": "@concat('{\"FileName\":\"', variables('Status File Name'),'\",\"PipeLineName\":\"Electro Transfer Report\",\"FilePath\":\"/datafactoryfiles/sftpfiles/',variables('Status File Name'),'\"}')",
 								"type": "Expression"
@@ -883,9 +883,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"body": {
 								"FileName": "Procurement.csv",
 								"EMailTo": "Ty.Diedrick@electroenterprises.com;Becca.Chitlik@crowe.com;Keegan.Lahm@crowe.com;John.Mattar@crowe.com",
@@ -952,9 +952,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"body": {
 								"FileName": "ChangesToPriorPeriods.csv",
 								"EMailTo": "Ty.Diedrick@electroenterprises.com;allen.hill@fdhaero.com",
@@ -1031,9 +1031,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"body": {
 								"FileName": "To-Stock-Inventory.csv",
 								"EMailTo": "Ty.Diedrick@electroenterprises.com;Mitch.Enright@electroenterprises.com",
@@ -1146,9 +1146,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"body": {
 								"FileName": "ARopen.csv",
 								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
@@ -1179,9 +1179,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"body": {
 								"FileName": "APopen.csv",
 								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
@@ -1212,9 +1212,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"method": "POST",
 							"headers": {},
+							"url": "https://prod-03.southcentralus.logic.azure.com:443/workflows/d0e22226ef054a3b89f6fae46761781c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOGZ5JNwLp-jnUGcklAj12xMaN9Y8r2RO-n0bQ3Yy5U",
 							"body": {
 								"FileName": "POopen.csv",
 								"EMailTo": "allen.hill@fdhaero.com;Ty.Diedrick@electroenterprises.com;Jennifer.smith@electroenterprises.com",
@@ -2605,7 +2605,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -2635,7 +2635,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -2698,7 +2698,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -2737,7 +2737,7 @@
 			"properties": {
 				"description": "Run the Reports every Sunday Afternoon at 3:15 to try and ensure we dont hit any of the Azure Downtimes or scheduled SQL Maintance",
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -2779,7 +2779,7 @@
 			"properties": {
 				"description": "Run the weekly reports and email them",
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -2815,7 +2815,7 @@
 			"properties": {
 				"description": "Week",
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
